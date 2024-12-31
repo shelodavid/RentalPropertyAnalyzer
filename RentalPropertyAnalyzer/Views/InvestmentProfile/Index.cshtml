@@ -1,0 +1,110 @@
+﻿@model List<RentalPropertyAnalyzer.Models.InvestmentProfile>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<h2>@ViewBag.Title</h2>
+
+<div class="container-fluid">
+    <div class="row">
+        @foreach (var profile in Model)
+        {
+            <div class="col-lg-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <i class="fas fa-home fa-2x text-gray-300"></i>
+                        </div>
+                       
+                        <div class="col-md-10 text-lg-left font-weight-bold text-info text-uppercase mb-1">
+                            Property Purchase Costs
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+
+                                <p class="card-text">Downpayment Percentage : @profile.DownpaymentPercentage</p>
+                                <p class="card-text">Mortgage Term (Yrs) : @profile.Term</p>
+                                <p class="card-text">Interest Rate : @profile.MortgageInterestRate</p>
+                                <p class="card-text">PMI Rate : @profile.PMIRate</p>
+                               
+                                
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <i class="fas fa-calculator fa-2x text-gray-300"></i>
+                        </div>
+
+                        <div class="col-md-10 text-lg-left font-weight-bold text-info text-uppercase mb-1">
+                           Inspection and Closing Closts
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+
+                                <p class="card-text">Title Insurance Cost : @profile.TitleInsuranceCost</p>
+                                <p class="card-text">Title Search Fee : @profile.TitleSearchFee</p>
+                                <p class="card-text">Escrow Fee : @profile.EscrowFee</p>
+                                <p class="card-text">Flood Inspection Fee : @profile.FloodInspectionFee</p>
+                                <p class="card-text">Loan Origination Fee : @profile.LoanOriginationFee</p>
+                                <p class="card-text">Appraisal Fee : @profile.AppraisalFee</p>
+                                <p class="card-text">Realtor Closing Fee (%) : @profile.RealtorClosingFeePercentage</p>
+
+                                
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <i class="fas fa-signature fa-2x text-gray-300"></i>
+                        </div>
+
+                        <div class="col-md-10 text-lg-left font-weight-bold text-info text-uppercase mb-1">
+                            Operating Expenses
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+
+                                <p class="card-text">Renovation Budget : @profile.RenovationCosts</p>
+                                <p class="card-text">Property Management Fee (%) : @profile.PropertyManagementFee</p>
+                                <p class="card-text">Monthly Utilities : @profile.MonthlyUtilitiesCost</p>
+                                <p class="card-text">HOA Costs : @profile.HOAEstimate</p>
+                                <p class="card-text">Property Tax Rate (%) : @profile.PropertyTaxRate</p>
+                                <p class="card-text">Landlord's Insurance : @profile.HomeownersInsurance</p>
+                                <p class="card-text">Umbrella Insurance : @profile.BalloonInsurance</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+

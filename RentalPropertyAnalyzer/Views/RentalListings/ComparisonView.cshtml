@@ -1,0 +1,159 @@
+﻿@model RentalPropertyAnalyzer.Models.ComparisonViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<div class="container">
+    <div class="container">
+        <form id="properties-form" method="post" action="@Url.Action("SaveSelectedProperties", "RentalListings")">
+       
+        <div class="row">
+           
+            @if (Model.PropertiesToCompare != null && Model.PropertiesToCompare.Any())
+            {
+                int i = 0; // Initialize a counter for indexing
+                foreach (var property in Model.PropertiesToCompare)
+                {
+                    <!-- ... within your foreach loop for each property ... -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <!-- Checkbox for selecting the property -->
+
+                            <img class="card-img-top" src="@property.ImgSrc" alt="Property Image">
+                            <div class="card-body">
+                                    <input type="checkbox" class="property-checkbox" data-index="@i" data-zipid="@property.ZipID" />
+                                <h6 class="card-title">@property.StreetAddress</h6>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <p class="card-text" style="font-size: 12px;">Price: $@property.Price.ToString("N2")</p>
+                                        <p class="card-text" style="font-size: 12px;">Downpayment: $@property.Downpayment.ToString("N2")</p>
+                                        <p class="card-text" style="font-size: 12px;">Mortgage: $@property.EstimatedMortgageCost.ToString("N2")</p>
+                                    </div>
+                                    <div class="col-6">
+                                            <p class="card-text" style="font-size: 12px;">
+                                                Rent Estimate: $<span id="display-estimatedrent-@property.ZipID">@property.EstimatedRent</span>
+                                                <i class="fas fa-pencil-alt" onclick="editEstimatedRent('@property.ZipID')"></i>
+                                                <input type="hidden" class="form-control form-control-sm" id="input-estimatedrent-@property.ZipID" value="@property.EstimatedRent" name="EstimatedRent" />
+                                            </p>
+
+                                        <p class="card-text" style="font-size: 12px;">
+                                            Insurance: $<span id="display-insurance-@property.ZipID">@property.EstimatedInsuranceCost</span>
+                                            <i class="fas fa-pencil-alt" onclick="editInsurance('@property.ZipID', true)"></i>
+                                            <input type="hidden" class="form-control form-control-sm" id="input-insurance-@property.ZipID" value="@property.EstimatedInsuranceCost" name="InsuranceCosts" />
+                                        </p>
+
+                                        <p class="card-text" style="font-size: 12px;">
+                                            HOA Cost: $<span id="display-hoa-@property.ZipID">@property.HOAEstimate</span>
+                                            <i class="fas fa-pencil-alt" onclick="editHOA('@property.ZipID')"></i>
+                                            <input type="hidden" class="form-control form-control-sm" id="input-hoa-@property.ZipID" value="@property.HOAEstimate" name="HOA" />
+                                        </p>
+
+                                            <input type="hidden" name="selectedProperties[@i]" value="@property.ZipID" />
+                                            <input type="hidden" class="insurance-input" name="insuranceCosts[@i]" value="@property.EstimatedInsuranceCost" />
+                                            <input type="hidden" class="hoa-input" name="hoa[@i]" value="@property.HOAEstimate" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                        i++; // Increment the counter
+                }
+            }
+           
+            else
+            {
+                <div class="col">
+                    <p>No Data Available</p>
+                </div>
+            }
+
+        
+        </div>
+
+        <button id="save-changes" class="btn btn-primary">Save Changes</button>
+        </form>
+    </div>
+
+</div>
+    
+    <script>
+
+        // Function to hide all edit fields when the page loads
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Hide all input fields initially
+            var editInputs = document.querySelectorAll("input[id^='input-']");
+            editInputs.forEach(function (input) {
+                input.type = 'hidden';
+            });
+        });
+
+        function editInsurance(zipID) 
+        {
+            var displayInsurance = document.getElementById('display-insurance-' + zipID);
+            var insuranceInput = document.getElementById('input-insurance-' + zipID);
+            // Toggle visibility and update the value for form submission
+            if (insuranceInput.type === 'hidden') {
+                displayInsurance.style.display = 'none';
+                insuranceInput.type = 'text';
+                insuranceInput.value = displayInsurance.innerText; // Initialize editable input with the current value
+            } else {
+                displayInsurance.style.display = 'block';
+                displayInsurance.innerText = insuranceInput.value; // Update display text with the edited value
+                insuranceInput.type = 'hidden';
+                // Assuming you have a hidden input for form submission with a class 'insurance-input'
+                document.querySelector('.insurance-input[data-zipid="' + zipID + '"]').value = insuranceInput.value;
+            }
+        }
+
+    // Similar structure for editHOA function...
+
+
+        function editHOA(zipID) 
+        {
+            var displayHOA = document.getElementById('display-hoa-' + zipID);
+            var hoaInput = document.getElementById('input-hoa-' + zipID);
+            // Assuming you have a hidden input for form submission with a class 'hoa-input'
+            var hiddenHOAInput = document.querySelector('.hoa-input[data-zipid="' + zipID + '"]');
+
+            // Toggle visibility and update the value for form submission
+            if (hoaInput.type === 'hidden') {
+                displayHOA.style.display = 'none';
+                hoaInput.type = 'text';
+                hoaInput.value = displayHOA.innerText.replace(/^\$/, ''); // Remove the $ sign and initialize editable input with the current value
+            } else {
+                displayHOA.style.display = 'inline';
+                displayHOA.innerText = '$' + hoaInput.value; // Update display text with the edited value and add $ sign
+                hoaInput.type = 'hidden';
+                hiddenHOAInput.value = hoaInput.value; // Update hidden input with the edited value for form submission
+            }
+        }
+
+    function editEstimatedRent(zipID) {
+
+        var displayEstimatedRent = document.getElementById('display-estimatedrent-' + zipID);
+        var estimatedRentInput = document.getElementById('input-estimatedrent-' + zipID);
+        var hiddenEstimatedRentInput = document.querySelector('.estimatedRent-input[data-zipid="' + zipID + '"]');
+
+        if (estimatedRentInput.type === 'hidden') {
+            displayEstimatedRent.style.display = 'none';
+            estimatedRentInput.type = 'text';
+            estimatedRentInput.value = displayEstimatedRent.innerText.replace(/^\$/, '');
+        } else {
+            displayEstimatedRent.style.display = 'inline';
+            displayEstimatedRent.innerText = '$' + estimatedRentInput.value;
+            estimatedRentInput.type = 'hidden';
+            hiddenEstimatedRentInput.value = estimatedRentInput.value;
+        }
+    }
+
+
+    </script>
+
+
+

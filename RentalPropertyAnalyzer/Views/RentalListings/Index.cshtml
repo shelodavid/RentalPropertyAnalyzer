@@ -1,0 +1,214 @@
+﻿@model RentalPropertyAnalyzer.Models.PaginatedRentalViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Content Wrapper -->
+<div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Main Content -->
+    <div id="content">
+
+        <div class="container-fluid" style="padding: 0;">
+            <div class="col-auto">
+                <h6 class="m-0 font-weight-bold text-primary">Property Count: @Model.Pagination.TotalCount.ToString("N0")</h6>
+            </div>
+            <div class="card shadow">
+                <div class="card-header">
+                    @using (Html.BeginForm("Index", "RentalListings", FormMethod.Get, new { @class = "row g-3 align-items-center" }))
+                    {
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label for="stateFilter">State:</label>
+                                @Html.DropDownList("stateFilter", Model.StateList, "Select State", new { @class = "form-control", @id = "stateFilter" })
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="countySelector">County:</label>
+                                <select id="countySelector" name="countyFilter" class="form-control">
+                                    <option value="">Select a state first</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="propType">Property Type:</label>
+                                <select name="propertyTypeFilter" class="form-control">
+                                    <option value="">All</option>
+                                    <option value="TOWNHOUSE">Townhouse</option>
+                                    <option value="CONDO">Condo</option>
+                                    <option value="SINGLE_FAMILY">Single Family</option>
+                                    <option value="APARTMENT">Apartment</option>
+                                    <option value="MULTI_FAMILY">Multi-Family</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="minPrice">Min Price:</label>
+                                <input type="text" id="minPrice" name="minPrice" class="form-control" placeholder="$0.00" />
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="maxPrice">Max Price:</label>
+                                <input type="text" id="maxPrice" name="maxPrice" class="form-control" placeholder="$0.00" />
+                            </div>
+                            <div class="form-group col-md-2 d-flex align-items-end">
+                                <input type="submit" value="Filter" class="btn btn-primary w-100" />
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="card-body">
+                    <div class="table-responsive">
+
+                        @using (Html.BeginForm("CompareProperties", "RentalListings", FormMethod.Post))
+                        {
+                            <table class="table table-bordered table-hover table-sm modern-table w-100">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Property Selector</th>
+                                        <th>Thumbnail</th>
+                                        <th>Property Address</th>
+                                        <th>County</th>
+                                        <th>
+                                            @Html.ActionLink("Zip Code", "Index", new { sortOrder = ViewBag.ZipCodeSortParam })
+                                            @if (ViewBag.CurrentSort == "ZipCode_Asc")
+                                            {
+                                                <i class="bi bi-arrow-up"></i>
+                                            }
+                                            else if (ViewBag.CurrentSort == "ZipCode_Desc")
+                                            {
+                                                <i class="bi bi-arrow-down"></i>
+                                            }
+                                        </th>
+                                        <th>Property Type</th>
+                                        <th>Price</th>
+                                        <th>Estimated Rent</th>
+                                        <th>
+                                            @Html.ActionLink("Rent Price Ratio", "Index", new { sortOrder = ViewBag.RatioSortParam })
+                                            @if (ViewBag.CurrentSort == "Ratio_Asc")
+                                            {
+                                                <i class="fas fa-sort-up"></i>
+                                            }
+                                            else if (ViewBag.CurrentSort == "Ratio_Desc")
+                                            {
+                                                <i class="fas fa-sort-down"></i>
+                                            }
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.Rentals != null && Model.Rentals.Any())
+                                    {
+                                        foreach (var rental in Model.Rentals)
+                                        {
+                                            <tr>
+                                                <td><input type="checkbox" name="selectedProperties" value="@rental.ID" /></td>
+                                                <td>
+                                                    <img class="thumbnail" src="@rental.ImgSrc" alt="Property Thumbnail" />
+                                                </td>
+
+                                                <td>
+                                                    <a href="https://www.zillow.com/homedetails/@(rental.Zpid)_zpid/" target="_blank">
+                                                        @($"{rental.StreetAddress}, {rental.City}, {rental.State} {rental.ZipCode}")
+                                                    </a>
+                                                </td>
+                                                <td>@rental.County</td>
+                                                <td>@rental.ZipCode</td>
+                                                <td>@rental.PropertyType</td>
+                                                <td>@String.Format("{0:C}", rental.Price)</td>
+                                                <td>@String.Format("{0:C}", rental.EstimatedRent)</td>
+                                                <td>@rental.RentalPriceRatio.ToString("N5")</td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="9" class="text-center">No Data Available</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                            <div class="text-left my-3">
+                                <input type="submit" value="Compare Selected Properties" class="btn btn-primary" />
+                            </div>
+                        }
+
+                        <div class="row">
+                            <div class="col-md-6 text-left">
+                                @if (Model.Pagination.HasPreviousPage)
+                                {
+                                    <a href="@Url.Action("Index", new { pageNumber = Model.Pagination.CurrentPage - 1 })" class="btn btn-outline-primary btn-sm" title="Previous">
+                                        <i class="fas fa-arrow-left"></i>
+                                    </a>
+                                }
+                            </div>
+                            <div class="col-md-6 text-right">
+                                @if (Model.Pagination.HasNextPage)
+                                {
+                                    <a href="@Url.Action("Index", new { pageNumber = Model.Pagination.CurrentPage + 1 })" class="btn btn-outline-primary btn-sm" title="Next">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+        <script>
+            $(document).ready(function () {
+                // Format Min and Max Price as USD
+                $('#minPrice, #maxPrice').on('blur', function () {
+                    let value = $(this).val().replace(/[^0-9.]/g, ''); // Remove non-numeric characters
+                    if (value) {
+                        value = parseFloat(value).toLocaleString('en-US', {
+                            style: 'currency',
+                            currency: 'USD',
+                            minimumFractionDigits: 2
+                        });
+                        $(this).val(value);
+                    }
+                });
+
+                $('#minPrice, #maxPrice').on('focus', function () {
+                    let value = $(this).val().replace(/[^0-9.]/g, ''); // Remove currency symbols and commas
+                    $(this).val(value); // Show plain number for editing
+                });
+
+                // County dropdown AJAX
+                $('#stateFilter').change(function () {
+                    var selectedState = $(this).val();
+                    if (selectedState) {
+                        $('#countySelector').prop('disabled', true); // Disable while loading
+                        $.ajax({
+                            url: '@Url.Action("GetCounties", "RentalListings")',
+                            type: 'GET',
+                            dataType: 'json',
+                            data: { stateCode: selectedState },
+                            success: function (counties) {
+                                $('#countySelector').empty().append('<option value="">Select County</option>');
+                                $.each(counties, function (index, county) {
+                                    $('#countySelector').append($('<option></option>').val(county.value).text(county.text));
+                                });
+                                $('#countySelector').prop('disabled', false);
+                            },
+                            error: function () {
+                                alert('Error loading counties!');
+                                $('#countySelector').prop('disabled', false);
+                            }
+                        });
+                    } else {
+                        $('#countySelector').empty().append('<option value="">Select a state first</option>');
+                    }
+                });
+            });
+        </script>
+
+    </div>
+
+</div>
+

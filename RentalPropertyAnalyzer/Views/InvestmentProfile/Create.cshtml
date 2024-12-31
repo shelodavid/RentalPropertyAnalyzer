@@ -1,0 +1,29 @@
+﻿@model RentalPropertyAnalyzer.Models.InvestmentProfile
+
+@{
+    ViewBag.Title = "Create Investment Profile";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("Create", "Investment", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.InvestmentProfileName)
+        @Html.TextBoxFor(model => model.InvestmentProfileName, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.DownpaymentPercentage)
+        @Html.TextBoxFor(model => model.DownpaymentPercentage, new { @class = "form-control" })
+    </div>
+
+  @*   <div class="form-group">
+        @Html.LabelFor(model => model.PMIRate)
+        @Html.TextBoxFor(model => model.PMIRate, new { @class = "form-control" })
+    </div> *@
+
+    <!-- Add other form fields as needed -->
+
+    <button type="submit" class="btn btn-primary">Save</button>
+}
