@@ -125,8 +125,7 @@ namespace RentalPropertyAnalyzer.Controllers
             string selectedState = Request.Query["stateFilter"];
 
             //Fetch County
-            //var counties=_stateService.GetCountiesByState(selectedState);
-            //string selectedCounty = Request.Query["countyFilter"];
+
             IEnumerable<SelectListItem> countySelectListItems = new List<SelectListItem>();
             if (!string.IsNullOrEmpty(selectedState))
             {
@@ -137,8 +136,21 @@ namespace RentalPropertyAnalyzer.Controllers
                 });
             }
 
-            var viewModel = new PaginatedRentalViewModel(rentalViews,new PaginationModel(totalCount, pageNumber, pageSize),states,selectedState, countySelectListItems, countyFilter); 
+            // var viewModel = new PaginatedRentalViewModel(rentalViews,new PaginationModel(totalCount, pageNumber, pageSize),states,selectedState, countySelectListItems, countyFilter); 
 
+            // **Modified Section**: Include current filters in the view model
+            var viewModel = new PaginatedRentalViewModel(rentalViews, new PaginationModel(totalCount, pageNumber, pageSize), states, selectedState, countySelectListItems, countyFilter)
+            {
+                CurrentFilters = new FilterParameters
+                {
+                    PropertyType = propertyTypeFilter,
+                    State = stateFilter,
+                    County = countyFilter,
+                    MinPrice = minPrice,
+                    MaxPrice = maxPrice,
+                    SortOrder = sortOrder
+                }
+            };
             return View(viewModel);
         }
 
@@ -274,6 +286,17 @@ namespace RentalPropertyAnalyzer.Controllers
             var counties = _stateService.GetCountiesByState(stateCode);
             return Json(counties);
         }
+
+        //// **New Class**: FilterParameters
+        //public class FilterParameters
+        //{
+        //    public string PropertyType { get; set; }
+        //    public string State { get; set; }
+        //    public string County { get; set; }
+        //    public int MinPrice { get; set; }
+        //    public int MaxPrice { get; set; }
+        //    public string SortOrder { get; set; }
+        //}
 
     }
 
