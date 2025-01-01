@@ -1,4 +1,4 @@
-﻿@model RentalPropertyAnalyzer.Models.PaginatedRentalViewModel
+﻿ @model RentalPropertyAnalyzer.Models.PaginatedRentalViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -17,7 +17,6 @@
             </div>
             <div class="card shadow">
                 <div class="card-header">
-
                     @using (Html.BeginForm("Index", "RentalListings", FormMethod.Get, new { @class = "row g-3 align-items-center" }))
                     {
                         <div class="row">
@@ -62,12 +61,10 @@
                             </div>
                         </div>
                     }
-
                 </div>
 
                 <div class="card-body">
                     <div class="table-responsive">
-
                         @using (Html.BeginForm("CompareProperties", "RentalListings", FormMethod.Post))
                         {
                             <table class="table table-bordered table-hover table-sm modern-table w-100">
@@ -78,21 +75,40 @@
                                         <th>Property Address</th>
                                         <th>County</th>
                                         <th>
-                                            @Html.ActionLink("Zip Code", "Index", new { sortOrder = ViewBag.ZipCodeSortParam })
+                                            @Html.ActionLink("Zip Code", "Index", new {
+
+                                                    sortOrder = ViewBag.ZipCodeSortParam,
+                                                    pageNumber = Model.Pagination.CurrentPage,
+                                                    pageSize = Model.Pagination.PageSize,
+                                                    minPrice = Model.CurrentFilters?.MinPrice,
+                                                    maxPrice = Model.CurrentFilters?.MaxPrice,
+                                                    stateFilter = Model.CurrentFilters?.State,
+                                                    countyFilter = Model.CurrentFilters?.County,
+                                                    propertyTypeFilter = Model.CurrentFilters?.PropertyType
+                                                })
                                             @if (ViewBag.CurrentSort == "ZipCode_Asc")
                                             {
-                                                <i class="bi bi-arrow-up"></i>
+                                                <i class="fas fa-sort-up"></i>
                                             }
                                             else if (ViewBag.CurrentSort == "ZipCode_Desc")
                                             {
-                                                <i class="bi bi-arrow-down"></i>
+                                                <i class="fas fa-sort-down"></i>
                                             }
                                         </th>
                                         <th>Property Type</th>
                                         <th>Price</th>
                                         <th>Estimated Rent</th>
                                         <th>
-                                            @Html.ActionLink("Rent Price Ratio", "Index", new { sortOrder = ViewBag.RatioSortParam })
+                                            @Html.ActionLink("Rent Price Ratio", "Index", new {
+                                                    sortOrder = ViewBag.RatioSortParam,
+                                                    pageNumber = Model.Pagination.CurrentPage,
+                                                    pageSize = Model.Pagination.PageSize,
+                                                    minPrice = Model.CurrentFilters?.MinPrice,
+                                                    maxPrice = Model.CurrentFilters?.MaxPrice,
+                                                    stateFilter = Model.CurrentFilters?.State,
+                                                    countyFilter = Model.CurrentFilters?.County,
+                                                    propertyTypeFilter = Model.CurrentFilters?.PropertyType
+                                                })
                                             @if (ViewBag.CurrentSort == "Ratio_Asc")
                                             {
                                                 <i class="fas fa-sort-up"></i>
@@ -114,7 +130,6 @@
                                                 <td>
                                                     <img class="thumbnail" src="@rental.ImgSrc" alt="Property Thumbnail" />
                                                 </td>
-
                                                 <td>
                                                     <a href="https://www.zillow.com/homedetails/@(rental.Zpid)_zpid/" target="_blank">
                                                         @($"{rental.StreetAddress}, {rental.City}, {rental.State} {rental.ZipCode}")
@@ -143,11 +158,21 @@
                             </div>
                         }
 
+                        <!-- START: Updated Pagination Logic -->
                         <div class="row">
                             <div class="col-md-6 text-left">
                                 @if (Model.Pagination.HasPreviousPage)
                                 {
-                                    <a href="@Url.Action("Index", new { pageNumber = Model.Pagination.CurrentPage - 1 })" class="btn btn-outline-primary btn-sm" title="Previous">
+                                    <a href="@Url.Action("Index", new {
+                                        pageNumber = Model.Pagination.CurrentPage - 1,
+                                        pageSize = Model.Pagination.PageSize,
+                                        minPrice = Model.CurrentFilters?.MinPrice,
+                                        maxPrice = Model.CurrentFilters?.MaxPrice,
+                                        stateFilter = Model.CurrentFilters?.State,
+                                        countyFilter = Model.CurrentFilters?.County,
+                                        propertyTypeFilter = Model.CurrentFilters?.PropertyType,
+                                        sortOrder = Model.CurrentFilters?.SortOrder
+                                    })" class="btn btn-outline-primary btn-sm" title="Previous">
                                         <i class="fas fa-arrow-left"></i>
                                     </a>
                                 }
@@ -155,18 +180,30 @@
                             <div class="col-md-6 text-right">
                                 @if (Model.Pagination.HasNextPage)
                                 {
-                                    <a href="@Url.Action("Index", new { pageNumber = Model.Pagination.CurrentPage + 1 })" class="btn btn-outline-primary btn-sm" title="Next">
+                                    <a href="@Url.Action("Index", new {
+                                        pageNumber = Model.Pagination.CurrentPage + 1,
+                                        pageSize = Model.Pagination.PageSize,
+                                        minPrice = Model.CurrentFilters?.MinPrice,
+                                        maxPrice = Model.CurrentFilters?.MaxPrice,
+                                        stateFilter = Model.CurrentFilters?.State,
+                                        countyFilter = Model.CurrentFilters?.County,
+                                        propertyTypeFilter = Model.CurrentFilters?.PropertyType,
+                                        sortOrder = Model.CurrentFilters?.SortOrder
+                                    })" class="btn btn-outline-primary btn-sm" title="Next">
                                         <i class="fas fa-arrow-right"></i>
                                     </a>
                                 }
                             </div>
                         </div>
+                        <!-- END: Updated Pagination Logic -->
                     </div>
                 </div>
 
             </div>
         </div>
     </div>
+</div>
+
 
         <script>
                     $(document).ready(function () {
