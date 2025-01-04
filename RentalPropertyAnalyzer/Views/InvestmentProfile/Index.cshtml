@@ -1,177 +1,231 @@
-﻿@* @model List<RentalPropertyAnalyzer.Models.InvestmentProfile>
+﻿@model List<RentalPropertyAnalyzer.Models.InvestmentProfile>
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "My Investment Profiles";
 }
 
-
-
-<h2>@ViewBag.Title</h2>
-
-<div class="container-fluid">
-    <div class="row">
-        @foreach (var profile in Model)
-        {
-            <div class="col-lg-4">
-                <div class="card border-left-info shadow h-100 py-2">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <i class="fas fa-home fa-2x text-gray-300"></i>
-                        </div>
-                       
-                        <div class="col-md-10 text-lg-left font-weight-bold text-info text-uppercase mb-1">
-                            Property Purchase Costs
-                        </div>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-
-                                <p class="card-text">Downpayment Percentage : @profile.DownpaymentPercentage</p>
-                                <p class="card-text">Mortgage Term (Yrs) : @profile.Term</p>
-                                <p class="card-text">Interest Rate : @profile.MortgageInterestRate</p>
-                                <p class="card-text">Loan Origination Fees : @profile.LoanOriginationFee</p>
-                                <p class="card-text">Appraisal Fee : @profile.AppraisalFee</p>
-                                <p class="card-text">Title Insurance Cost : @profile.TitleInsuranceCost</p>
-                                <p class="card-text">Title Insurance Search Fee : @profile.TitleSearchFee</p>
-                               
-                                
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="card border-left-info shadow h-100 py-2">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <i class="fas fa-calculator fa-2x text-gray-300"></i>
-                        </div>
-
-                        <div class="col-md-10 text-lg-left font-weight-bold text-info text-uppercase mb-1">
-                           Inspection and Closing Closts
-                        </div>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-
-                                <p class="card-text">Title Insurance Cost : @profile.TitleInsuranceCost</p>
-                                <p class="card-text">Title Search Fee : @profile.TitleSearchFee</p>
-                                <p class="card-text">Escrow Fee : @profile.EscrowFee</p>
-                                <p class="card-text">Flood Inspection Fee : @profile.FloodInspectionFee</p>
-                                <p class="card-text">Loan Origination Fee : @profile.LoanOriginationFee</p>
-                                <p class="card-text">Appraisal Fee : @profile.AppraisalFee</p>
-                                <p class="card-text">Realtor Closing Fee (%) : @profile.RealtorClosingFeePercentage</p>
-
-                                
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="card border-left-info shadow h-100 py-2">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <i class="fas fa-signature fa-2x text-gray-300"></i>
-                        </div>
-
-                        <div class="col-md-10 text-lg-left font-weight-bold text-info text-uppercase mb-1">
-                            Operating Expenses
-                        </div>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-
-                                <p class="card-text">Renovation Budget : @profile.RenovationCosts</p>
-                                <p class="card-text">Property Management Fee (%) : @profile.PropertyManagementFee</p>
-                                <p class="card-text">Monthly Utilities : @profile.MonthlyUtilitiesCost</p>
-                                <p class="card-text">HOA Costs : @profile.HOAEstimate</p>
-                                <p class="card-text">Property Tax Rate (%) : @profile.PropertyTaxRate</p>
-                                <p class="card-text">Landlord's Insurance : @profile.HomeownersInsurance</p>
-                                <p class="card-text">Umbrella Insurance : @profile.BalloonInsurance</p>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-
-</div>
-
-
- *@
-
-@model List<RentalPropertyAnalyzer.Models.InvestmentProfile>
-
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Investment Profiles";
-}
-
-<h2>@ViewBag.Title</h2>
+<h2 class="text-center">@ViewBag.Title</h2>
 
 <!-- Added form to handle profile updates -->
 <form id="investment-profile-form" method="post" action="@Url.Action("SaveChanges", "InvestmentProfile")">
 
-@* <form asp-controller="InvestmentProfile" asp-action="SaveChanges" method="post"> *@
-   
+    @* <form asp-controller="InvestmentProfile" asp-action="SaveChanges" method="post"> *@
+
     <div class="container-fluid">
         <div class="row">
             @for (int i = 0; i < Model.Count; i++)
             {
                 var profile = Model[i];
-                <div class="col-lg-4">
+
+                <!-- Core Purchasing Details Card -->
+                <div class="col-lg-6">
                     <div class="card border-left-info shadow h-100 py-2">
                         <div class="card-body">
                             <!-- Displaying profile details for editing -->
-                            <h5 class="card-title">Profile @profile.Id</h5>
+                            <h5 class="card-title">Core Purchasing Details</h5>
                             <!-- Hidden input to maintain profile ID -->
                             <input type="hidden" name="profiles[@i].Id" value="@profile.Id" />
 
-                            <!-- Editable fields for DownpaymentPercentage -->
+                            <!-- Slider for DownpaymentPercentage -->
                             <div class="form-group">
                                 <label for="downpaymentPercentage">Downpayment Percentage</label>
-                                <input type="number" step="0.01" name="profiles[@i].DownpaymentPercentage" value="@profile.DownpaymentPercentage" class="form-control" />
+                                <input type="range" min="0" max="100" step="0.1" name="profiles[@i].DownpaymentPercentage" value="@profile.DownpaymentPercentage" class="form-range" oninput="togglePMISlider(this, @i); this.nextElementSibling.value = parseFloat(this.value).toFixed(2)" />
+                                <output>@profile.DownpaymentPercentage.ToString("F2")</output>
                             </div>
 
-                            <!-- Editable fields for Term -->
-                            <div class="form-group">
-                                <label for="term">Mortgage Term (Years)</label>
-                                <input type="number" name="profiles[@i].Term" value="@profile.Term" class="form-control" />
-                            </div>
 
-                            <!-- Editable fields for MortgageInterestRate -->
+                            <!-- Slider for MortgageInterestRate -->
                             <div class="form-group">
                                 <label for="mortgageInterestRate">Mortgage Interest Rate (%)</label>
-                                <input type="number" step="0.01" name="profiles[@i].MortgageInterestRate" value="@profile.MortgageInterestRate" class="form-control" />
+                                <input type="range" min="0" max="20" step="0.1" name="profiles[@i].MortgageInterestRate" value="@profile.MortgageInterestRate" class="form-range" oninput="this.nextElementSibling.value = parseFloat(this.value).toFixed(2)" />
+                                <output>@profile.MortgageInterestRate.ToString("F2")</output>
                             </div>
 
-                            <!-- Editable fields for PropertyTaxRate -->
+                            <!-- Slider for Term -->
+                            <div class="form-group">
+                                <label for="term">Mortgage Term (Years)</label>
+                                <input type="range" min="0" max="30" step="1" name="profiles[@i].Term" value="@profile.Term" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.Term</output>
+                            </div>
+
+
+                            <!-- Sliders for Additional Fees -->
+                            <div class="form-group">
+                                <label for="loanOriginationFee">Loan Origination Fee</label>
+                                <input type="range" min="0" max="10000" step="50" name="profiles[@i].LoanOriginationFee" value="@profile.LoanOriginationFee" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.LoanOriginationFee</output>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="appraisalFee">Appraisal Fee</label>
+                                <input type="range" min="0" max="5000" step="50" name="profiles[@i].AppraisalFee" value="@profile.AppraisalFee" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.AppraisalFee</output>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="creditReportFee">Credit Report Fee</label>
+                                <input type="range" min="0" max="500" step="10" name="profiles[@i].CreditReportFee" value="@profile.CreditReportFee" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.CreditReportFee</output>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="titleInsuranceCost">Title Insurance Cost</label>
+                                <input type="range" min="0" max="3000" step="50" name="profiles[@i].TitleInsuranceCost" value="@profile.TitleInsuranceCost" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.TitleInsuranceCost</output>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="titleSearchFee">Title Search Fee</label>
+                                <input type="range" min="0" max="1000" step="25" name="profiles[@i].TitleSearchFee" value="@profile.TitleSearchFee" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.TitleSearchFee</output>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="escrowFee">Escrow Fee</label>
+                                <input type="range" min="0" max="5000" step="50" name="profiles[@i].EscrowFee" value="@profile.EscrowFee" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.EscrowFee</output>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="floodInspectionFee">Flood Inspection Fee</label>
+                                <input type="range" min="0" max="1000" step="25" name="profiles[@i].FloodInspectionFee" value="@profile.FloodInspectionFee" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.FloodInspectionFee</output>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="miscellaneousFees">Miscellaneous Fees</label>
+                                <input type="range" min="0" max="5000" step="50" name="profiles[@i].MiscellaneousFees" value="@profile.MiscellaneousFees" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.MiscellaneousFees</output>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Rental Costs Card -->
+                <div class="col-lg-6">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div class="card-body">
+                            <h5 class="card-title">Monthly Recurring Rental Costs</h5>
+
+
+                            <!-- Slider for HomeownersInsurance -->
+                            <div class="form-group">
+                                <label for="homeownersInsurance">Homeowners Insurance ($)</label>
+                                <input type="range" min="100" max="2000" step="20" name="profiles[@i].HomeownersInsurance" value="@profile.HomeownersInsurance" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.HomeownersInsurance</output>
+                            </div>
+
+                            <!-- Slider for PMIRate, disabled dynamically -->
+                            <div class="form-group">
+                                <label for="pmiRate">PMI Rate (%)</label>
+                                <input type="range" min="0" max="5" step="0.1" id="pmiRate-@i" name="profiles[@i].PMIRate" value="@(profile.DownpaymentPercentage < 20 ? profile.PMIRate : 0)" class="form-range" oninput="this.nextElementSibling.value = parseFloat(this.value).toFixed(2)" @(profile.DownpaymentPercentage >= 20 ? "disabled" : "") />
+                                <output>@(profile.DownpaymentPercentage < 20 ? profile.PMIRate.ToString("F2") : "0.00")</output>
+                            </div>
+
+                            <!-- Slider for PropertyTaxRate -->
                             <div class="form-group">
                                 <label for="propertyTaxRate">Property Tax Rate (%)</label>
-                                <input type="number" step="0.01" name="profiles[@i].PropertyTaxRate" value="@profile.PropertyTaxRate" class="form-control" />
+                                <input type="range" min="0" max="5" step="0.1" name="profiles[@i].PropertyTaxRate" value="@profile.PropertyTaxRate" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.PropertyTaxRate</output>
                             </div>
 
-                            <!-- Save Changes Button -->
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <!-- Slider for HomeownersInsurance -->
+                            <div class="form-group">
+                                <label for="homeownersInsurance">Homeowners Insurance ($)</label>
+                                <input type="range" min="0" max="5000" step="50" name="profiles[@i].HomeownersInsurance" value="@profile.HomeownersInsurance" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.HomeownersInsurance</output>
+                            </div>
+
+                            <!-- Slider for BalloonInsurance -->
+                            <div class="form-group">
+                                <label for="balloonInsurance">Balloon Insurance ($)</label>
+                                <input type="range" min="0" max="5000" step="50" name="profiles[@i].BalloonInsurance" value="@profile.BalloonInsurance" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.BalloonInsurance</output>
+                            </div>
+
+                            <!-- Slider for RenovationCosts -->
+                            <div class="form-group">
+                                <label for="renovationCosts">Renovation Costs ($)</label>
+                                <input type="range" min="0" max="20000" step="100" name="profiles[@i].RenovationCosts" value="@profile.RenovationCosts" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.RenovationCosts</output>
+                            </div>
+
+                            <!-- Slider for OtherExpenses -->
+                            <div class="form-group">
+                                <label for="otherExpenses">Other Expenses ($)</label>
+                                <input type="range" min="0" max="15000" step="100" name="profiles[@i].OtherExpenses" value="@profile.OtherExpenses" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.OtherExpenses</output>
+                            </div>
+
+                            <!-- Slider for AnnualAppreciationRate -->
+                            <div class="form-group">
+                                <label for="annualAppreciationRate">Annual Appreciation Rate (%)</label>
+                                <input type="range" min="0" max="10" step="0.1" name="profiles[@i].AnnualAppreciationRate" value="@profile.AnnualAppreciationRate" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.AnnualAppreciationRate</output>
+                            </div>
+
+                            <!-- Slider for VacancyRate -->
+                            <div class="form-group">
+                                <label for="vacancyRate">Vacancy Rate (%)</label>
+                                <input type="range" min="0" max="20" step="0.1" name="profiles[@i].VacancyRate" value="@profile.VacancyRate" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.VacancyRate</output>
+                            </div>
+
+                            <!-- Slider for PropertyManagementFee -->
+                            <div class="form-group">
+                                <label for="propertyManagementFee">Property Management Fee (%)</label>
+                                <input type="range" min="0" max="20" step="0.1" name="profiles[@i].PropertyManagementFee" value="@profile.PropertyManagementFee" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.PropertyManagementFee</output>
+                            </div>
+
+                            <!-- Slider for MonthlyMaintenanceBudget -->
+                            <div class="form-group">
+                                <label for="monthlyMaintenanceBudget">Monthly Maintenance Budget ($)</label>
+                                <input type="range" min="0" max="500" step="10" name="profiles[@i].MonthlyMaintenanceBudget" value="@profile.MonthlyMaintenanceBudget" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.MonthlyMaintenanceBudget</output>
+                            </div>
+
+                            <!-- Slider for MonthlyUtilitiesCost -->
+                            <div class="form-group">
+                                <label for="monthlyUtilitiesCost">Monthly Utilities Cost ($)</label>
+                                <input type="range" min="0" max="1000" step="10" name="profiles[@i].MonthlyUtilitiesCost" value="@profile.MonthlyUtilitiesCost" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.MonthlyUtilitiesCost</output>
+                            </div>
+
+                            <!-- Slider for HOAEstimate -->
+                            <div class="form-group">
+                                <label for="hoaEstimate">HOA Estimate ($)</label>
+                                <input type="range" min="0" max="1000" step="10" name="profiles[@i].HOAEstimate" value="@profile.HOAEstimate" class="form-range" oninput="this.nextElementSibling.value = this.value" />
+                                <output>@profile.HOAEstimate</output>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             }
         </div>
+
+        <!-- Save Changes Button -->
+        <div class="row mt-3">
+            <div class="col-12 text-left">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
     </div>
 </form>
 
+<script>
+    function togglePMISlider(input, index) {
+        const pmiSlider = document.getElementById(`pmiRate-${index}`);
+        if (parseFloat(input.value) >= 20) {
+            pmiSlider.disabled = true;
+            pmiSlider.value = 0;
+            pmiSlider.nextElementSibling.value = "0.00";
+        } else {
+            pmiSlider.disabled = false;
+            pmiSlider.nextElementSibling.value = parseFloat(pmiSlider.value).toFixed(2);
+        }
+    }
+</script>
 <!-- End of additions/changes -->

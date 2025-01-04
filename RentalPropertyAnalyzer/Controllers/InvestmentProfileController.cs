@@ -1,102 +1,4 @@
-﻿//using Microsoft.AspNetCore.Http;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.EntityFrameworkCore;
-//using RentalPropertyAnalyzer.DataAccessLayer;
-
-//namespace RentalPropertyAnalyzer.Controllers
-//{
-//    public class InvestmentProfileController : Controller
-//    {
-//        private readonly InvestmentProfileContext _context;
-
-//        public InvestmentProfileController(InvestmentProfileContext context)
-//        {
-//            _context = context;
-//        }
-
-
-//        public async Task<IActionResult> Index()
-//        {
-//            // Assuming _context.InvestmentProfile correctly accesses your DbSet and
-//            // the stored procedure returns multiple profiles
-//            var profiles = await _context.InvestmentProfile
-//                                         .FromSqlRaw("EXEC GetInvestmentProfile")
-//                                         .ToListAsync();
-
-//            // No need to call FirstOrDefault() since you want a list of profiles
-//            // Directly pass the list of profiles to the view
-//            return View(profiles);
-//        }
-
-//        public ActionResult Details(int id)
-//        {
-//            return View();
-//        }
-
-//        // GET: InvestmentProfileController/Create
-//        public ActionResult Create()
-//        {
-//            return View();
-//        }
-
-//        // POST: InvestmentProfileController/Create
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        public ActionResult Create(IFormCollection collection)
-//        {
-//            try
-//            {
-//                return RedirectToAction(nameof(Index));
-//            }
-//            catch
-//            {
-//                return View();
-//            }
-//        }
-
-//        // GET: InvestmentProfileController/Edit/5
-//        public ActionResult Edit(int id)
-//        {
-//            return View();
-//        }
-
-//        // POST: InvestmentProfileController/Edit/5
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        public ActionResult Edit(int id, IFormCollection collection)
-//        {
-//            try
-//            {
-//                return RedirectToAction(nameof(Index));
-//            }
-//            catch
-//            {
-//                return View();
-//            }
-//        }
-
-//        // GET: InvestmentProfileController/Delete/5
-//        public ActionResult Delete(int id)
-//        {
-//            return View();
-//        }
-
-//        // POST: InvestmentProfileController/Delete/5
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        public ActionResult Delete(int id, IFormCollection collection)
-//        {
-//            try
-//            {
-//                return RedirectToAction(nameof(Index));
-//            }
-//            catch
-//            {
-//                return View();
-//            }
-//        }
-//    }
-//}
+﻿
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -141,7 +43,31 @@ namespace RentalPropertyAnalyzer.Controllers
                         existingProfile.Term = profile.Term;
                         existingProfile.MortgageInterestRate = profile.MortgageInterestRate;
                         existingProfile.PropertyTaxRate = profile.PropertyTaxRate;
-                        // Add additional field updates if necessary
+                        existingProfile.HomeownersInsurance = profile.HomeownersInsurance;
+                        existingProfile.HOAEstimate = profile.HOAEstimate;
+                        existingProfile.BalloonInsurance = profile.BalloonInsurance;
+                        existingProfile.RealtorClosingFeePercentage = profile.RealtorClosingFeePercentage;
+                        existingProfile.RenovationCosts = profile.RenovationCosts;
+                        existingProfile.ClosingCosts = profile.ClosingCosts ;
+                        existingProfile.PropertyManagementFee = profile.PropertyManagementFee;
+                        existingProfile.LoanOriginationFee = profile.LoanOriginationFee;
+                        existingProfile.AppraisalFee = profile.AppraisalFee;
+
+                        existingProfile.CreditReportFee = profile.CreditReportFee;
+                        existingProfile.TitleInsuranceCost = profile.TitleInsuranceCost;
+                        existingProfile.TitleSearchFee = profile.TitleSearchFee;
+                        existingProfile.EscrowFee = profile.EscrowFee;
+                        existingProfile.FloodInspectionFee = profile.FloodInspectionFee;
+                        existingProfile.MiscellaneousFees = profile.MiscellaneousFees;
+
+                        existingProfile.PMIRate = profile.PMIRate;
+                      
+                    
+                        existingProfile.OtherExpenses = profile.OtherExpenses;
+                        existingProfile.AnnualAppreciationRate = profile.AnnualAppreciationRate;
+                        existingProfile.VacancyRate = profile.VacancyRate;
+                        existingProfile.MonthlyUtilitiesCost = profile.MonthlyUtilitiesCost;
+                        existingProfile.HOAEstimate = profile.HOAEstimate;
                     }
                 }
 
