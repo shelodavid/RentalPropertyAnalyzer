@@ -1,0 +1,19 @@
+﻿@model RentalPropertyAnalyzer.Models.PurchaseSheetViewModel
+
+@{
+    ViewData["Title"] = "Purchase Sheet";
+}
+
+<h1>Purchase Sheet</h1>
+<div>
+    <h2>@Model.StreetAddress</h2>
+    <p>Price: $@Model.Price</p>
+    <p>Downpayment: $@Model.Downpayment</p>
+    <p>Property Type: $@Model.PropertyType</p>
+    <p>Bathrooms: $@Model.Bathrooms</p>
+    <p>Bedrooms: $@Model.Bedrooms</p>
+    <p>Insurance Costs: $@Model.EstimatedInsuranceCost</p>
+    <p>Tax Assessed Value: $@Model.TaxAssessedValue</p>
+  @*   <p>Mortgage Costs: $@Model.EstimatedMortgageCosts</p> *@
+</div>
+<a href="@Url.Action("Index", "Home")" class="btn btn-primary">Back to Home</a>

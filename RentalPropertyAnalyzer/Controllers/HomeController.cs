@@ -88,6 +88,32 @@ namespace RentalPropertyAnalyzer.Controllers
             }
         }
 
+        public IActionResult GeneratePurchaseSheet(int zipID)
+        {
+            try
+            {
+                // Execute stored procedure to fetch purchase sheet data
+                var purchaseSheet = _savedPropertiesContext.PurchaseSheetResults
+                    .FromSqlRaw("EXEC dbo.GetPurchaseSheet @ZipID", new SqlParameter("ZipID", zipID))
+                    .AsEnumerable()
+                    .FirstOrDefault();
+
+                if (purchaseSheet == null)
+                {
+                    return RedirectToAction("Index"); // Redirect if no data is returned
+                }
+
+                // Pass the data to the view
+                return View(purchaseSheet);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while generating purchase sheet for ZipID: {ZipID}", zipID);
+                return RedirectToAction("ErrorView");
+            }
+        }
+
+
 
 
     }
