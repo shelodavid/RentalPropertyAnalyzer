@@ -3,17 +3,64 @@
 @{
     ViewData["Title"] = "Purchase Sheet";
 }
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-<h1>Purchase Sheet</h1>
-<div>
-    <h2>@Model.StreetAddress</h2>
-    <p>Price: $@Model.Price</p>
-    <p>Downpayment: $@Model.Downpayment</p>
-    <p>Property Type: $@Model.PropertyType</p>
-    <p>Bathrooms: $@Model.Bathrooms</p>
-    <p>Bedrooms: $@Model.Bedrooms</p>
-    <p>Insurance Costs: $@Model.EstimatedInsuranceCost</p>
-    <p>Tax Assessed Value: $@Model.TaxAssessedValue</p>
-  @*   <p>Mortgage Costs: $@Model.EstimatedMortgageCosts</p> *@
+
+
+<div class="row mb-4">
+    <!-- Property Image -->
+    <div class="col-md-4">
+        <img src="@Model.ImgSrc" alt="Property Image" class="card-img-top">
+    </div>
+    <!-- Property Information -->
+    <div class="col-md-8">
+        <h1 class="info-header">🏠 Purchase Sheet</h1>
+        <p><strong>Address:</strong> @Model.StreetAddress</p>
+        <p><strong>Property Type:</strong> $@Model.PropertyType</p>
+        <p><strong>Price:</strong> $@Model.Price</p>
+        <p><strong>Bedrooms 🛏️ :</strong> @Model.Bedrooms </p>
+        <p><strong>Bathrooms 🛁 :</strong> @Model.Bathrooms </p>
+    </div>
 </div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>💵 Detailed Purchase Costs</h2>
+        <table class="table table-striped costs-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Amount (USD)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Purchase Price</td>
+                    <td>$@Model.Price</td>
+                </tr>
+                <tr>
+                <tr>
+                    <td>🏡 Mortgage Amount</td>
+                    <td>$@Model.MortgageAmount</td>
+                </tr>
+                <tr>
+                <tr>
+                    <td>🏡 Downpayment</td>
+                    <td>$@Model.Downpayment</td>
+                </tr>
+                <tr>
+                    <td>✍️ Loan Origination Fee</td>
+                    <td>$@Model.LoanOriginationFee</td>
+                </tr>
+                <tr class="total-row">
+                    <td>💳 Total Cost</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Back to Home</a>

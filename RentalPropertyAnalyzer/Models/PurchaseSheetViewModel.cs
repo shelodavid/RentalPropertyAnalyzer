@@ -12,8 +12,12 @@ namespace RentalPropertyAnalyzer.Models
         public decimal Price { get; set; }
         public decimal TaxAssessedValue { get; set; }     
         public decimal Downpayment { get; set; }
-        //public decimal EstimatedMortgageCosts { get; set; }
+        public decimal EstimatedMortgageCost { get; set; }
         public decimal EstimatedInsuranceCost { get; set; }
+
+        public decimal LoanOriginationFee { get; set; }
+        public decimal MortgageAmount { get; set; }
+        public string? ImgSrc { get; set; }
 
     }
 }
