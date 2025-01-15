@@ -24,15 +24,18 @@
     </div>
     <div class="col-md-4">
         <p><strong>Price:</strong> @Model.Price.ToString("C")</p>
+        <p><strong>Interest Rate:</strong> @Model.MortgageInterestRate %</p>
         <p><strong>Mortgage Term ( Years):</strong> @Model.Term</p>
         <p><strong>Downpayment Percentage:</strong> @Model.DownpaymentPercentage %</p>
         <p><strong>Tax Assessed Value:</strong> @Model.TaxAssessedValue.ToString("C")</p>
+        
+        
     </div>
 </div>
 
 <div class="row">
     <div class="col-md-12">
-        <h3>Itemized Purchase Costs</h3>
+        <h3>Itemized Closing Costs</h3>
         <table class="table table-striped costs-table">
             <thead>
                 <tr>
@@ -94,7 +97,7 @@
 
 
                 <tr class="total-row">
-                    <td>Total Purchase Cost</td>
+                    <td>Cash to Close</td>
                     <td style="text-align: center;">@Model.TotalCost.ToString("C")</td>
                     <td></td>
                 </tr>
