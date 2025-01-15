@@ -14,10 +14,33 @@ namespace RentalPropertyAnalyzer.Models
         public decimal Downpayment { get; set; }
         public decimal EstimatedMortgageCost { get; set; }
         public decimal EstimatedInsuranceCost { get; set; }
-
+        public decimal LoanClosingCosts { get; set; }   
         public decimal LoanOriginationFee { get; set; }
         public decimal MortgageAmount { get; set; }
+        public decimal RealtorsCost { get; set; }
+        public decimal AppraisalFee { get; set; }
+        public decimal EscrowFee { get; set; }
+        public decimal DownpaymentPercentage { get; set; }
+        public decimal TitleInsuranceCost { get; set; }
+        public decimal FloodInspectionFee { get; set; }
         public string? ImgSrc { get; set; }
+        public int Term { get; set; }
+
+        public decimal TotalCost
+        {
+            get
+            {
+                // Add up the downpayment and fees
+                return Downpayment
+                     + LoanClosingCosts
+                     + LoanOriginationFee
+                     + RealtorsCost
+                     + AppraisalFee
+                     + EscrowFee
+                     + TitleInsuranceCost
+                     + FloodInspectionFee;
+            }
+        }
 
     }
 }

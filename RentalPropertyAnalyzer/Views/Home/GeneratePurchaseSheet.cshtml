@@ -11,51 +11,91 @@
 
 <div class="row mb-4">
     <!-- Property Image -->
-    <div class="col-md-4">
+    <div class="col-md-3">
         <img src="@Model.ImgSrc" alt="Property Image" class="card-img-top">
     </div>
     <!-- Property Information -->
-    <div class="col-md-8">
-        <h1 class="info-header">🏠 Purchase Sheet</h1>
+    <div class="col-md-4">
+        @* <h1 class="info-header">🏠 Purchase Sheet</h1> *@
         <p><strong>Address:</strong> @Model.StreetAddress</p>
-        <p><strong>Property Type:</strong> $@Model.PropertyType</p>
-        <p><strong>Price:</strong> $@Model.Price</p>
+        <p><strong>Property Type:</strong> @Model.PropertyType</p>
         <p><strong>Bedrooms 🛏️ :</strong> @Model.Bedrooms </p>
         <p><strong>Bathrooms 🛁 :</strong> @Model.Bathrooms </p>
+    </div>
+    <div class="col-md-4">
+        <p><strong>Price:</strong> @Model.Price.ToString("C")</p>
+        <p><strong>Mortgage Term ( Years):</strong> @Model.Term</p>
+        <p><strong>Downpayment Percentage:</strong> @Model.DownpaymentPercentage %</p>
+        <p><strong>Tax Assessed Value:</strong> @Model.TaxAssessedValue.ToString("C")</p>
     </div>
 </div>
 
 <div class="row">
     <div class="col-md-12">
-        <h2>💵 Detailed Purchase Costs</h2>
+        <h3>Itemized Purchase Costs</h3>
         <table class="table table-striped costs-table">
             <thead>
                 <tr>
                     <th>Item</th>
-                    <th>Amount (USD)</th>
+                    <th></th>
+                    <th rowspan="2"style="text-align:center">Amount (USD)</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>Purchase Price</td>
-                    <td>$@Model.Price</td>
+                    <td></td>
+                    <td style="text-align: center;">@Model.Price.ToString("C")</td>
+               
                 </tr>
                 <tr>
-                <tr>
-                    <td>🏡 Mortgage Amount</td>
-                    <td>$@Model.MortgageAmount</td>
+                    <td>Less Downpayment</td>
+                    <td style="text-align: center;">@Model.Downpayment.ToString("C")</td>
+                    <td></td>
                 </tr>
                 <tr>
-                <tr>
-                    <td>🏡 Downpayment</td>
-                    <td>$@Model.Downpayment</td>
+                    <td> Mortgage Amount</td>
+                    <td></td>
+                    <td style="text-align: center;">@Model.MortgageAmount.ToString("C")</td>
+                </tr>
+
+                <tr class="total-row"> 
+                    <td style="color:black">Fees and Other Closing Costs</td>
+                    <td></td>
+                    <td></td>
                 </tr>
                 <tr>
-                    <td>✍️ Loan Origination Fee</td>
-                    <td>$@Model.LoanOriginationFee</td>
+                    <td>Home Appraisal Fee</td>
+                    <td style ="text-align: center;">@Model.AppraisalFee.ToString("C")</td>
+                    <td></td>
                 </tr>
+                <tr>
+                    <td>Escrow Fee</td>
+                    <td style="text-align: center;">@Model.EscrowFee.ToString("C")</td>
+                    <td></td>
+                   
+                </tr>
+                <tr>
+                    <td>Flood Inspection Fee</td>
+                    <td style="text-align: center;">@Model.FloodInspectionFee.ToString("C")</td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td>Loan Origination Fee</td>
+                    <td style ="text-align: center;">@Model.LoanOriginationFee.ToString("C")</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Title Inspection Fee</td>
+                    <td style="text-align: center;">@Model.TitleInsuranceCost.ToString("C")</td>
+                    <td></td>
+                </tr>
+
+
                 <tr class="total-row">
-                    <td>💳 Total Cost</td>
+                    <td>Total Purchase Cost</td>
+                    <td style="text-align: center;">@Model.TotalCost.ToString("C")</td>
                     <td></td>
                 </tr>
             </tbody>
