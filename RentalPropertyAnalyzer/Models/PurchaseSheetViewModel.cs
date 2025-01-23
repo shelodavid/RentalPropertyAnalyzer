@@ -4,6 +4,12 @@ namespace RentalPropertyAnalyzer.Models
 {
     public class PurchaseSheetViewModel
     {
+    
+        public int InvestmentProfileID { get; set; }
+        public decimal CreditReportFee { get; set; }  
+        public decimal TitleSearchFee { get; set; }
+
+        public decimal MiscellaneousFees { get; set; }
         public int ZipID { get; set; }
         public string? StreetAddress { get; set; }
         public string? PropertyType { get; set; }

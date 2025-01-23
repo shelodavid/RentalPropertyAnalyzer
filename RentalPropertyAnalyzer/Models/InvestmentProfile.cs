@@ -33,7 +33,7 @@
         public decimal TitleSearchFee { get; set; }
         public decimal EscrowFee { get; set; }
         public decimal FloodInspectionFee { get; set; }
-        public decimal MiscellaneousFees { get; set; }
+        public decimal? MiscellaneousFees { get; set; }
 
 
 
