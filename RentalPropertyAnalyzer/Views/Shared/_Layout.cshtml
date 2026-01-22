@@ -138,6 +138,15 @@
             color: #2c3e50;
         }
 
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: #fff; /* or any background */
+        }
+
+
+
     </style>
 </head>
 <body id="page-top">
@@ -198,14 +207,18 @@
                This div is the "whitespace" area for sliders.
                The page can fill it by defining section SlidersSection in the .cshtml page.
             -->
-            <div class="row mb-3" style="min-height: 200px;">
-                @RenderSection("SlidersSection", required: false)
+            <div class="container">
+                <div class="row mb-3 py-4" style="min-height: 200px;">
+                    @RenderSection("SlidersSection", required: false)
+                    @RenderSection("StatsSection", required: false)
+                    @RenderSection("FilterSection", required: false)
+                    @RenderSection("PurchaseOverviewSection", required: false)
+                </div>
             </div>
 
-            <hr class="my-3" style="border-top: 10px solid #fff; opacity: 1;" />
             <!-- Content -->
             <div id="content">
-                <!-- Main body content from individual views/pages -->
+                @RenderSection("ControlsSection", required: false)
                 @RenderBody()
             </div>
         </div>

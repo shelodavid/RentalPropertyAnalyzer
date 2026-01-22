@@ -8,6 +8,56 @@
 <!-- Content Wrapper -->
 <div id="content-wrapper" class="d-flex flex-column">
 
+    @section FilterSection
+    {
+        <div class="card-header">
+            @using (Html.BeginForm("Index", "RentalListings", FormMethod.Get, new { @class = "row g-3 align-items-center" }))
+            {
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label for="stateFilter">State:</label>
+                        @Html.DropDownList("stateFilter", Model.StateList, "Select State", new { @class = "form-control", @id = "stateFilter" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="countySelector">County:</label>
+                        <select id="countySelector" name="countyFilter" class="form-control">
+                            <option value="">Select a state first</option>
+                            @if (Model.CountyList != null)
+                            {
+                                foreach (var item in Model.CountyList)
+                                {
+                                    <option value="@item.Value" @(item.Value == Model.SelectedCounty ? "selected" : "")>@item.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="propType">Property Type:</label>
+                        <select name="propertyTypeFilter" class="form-control">
+                            <option value="" @(string.IsNullOrEmpty(Model.CurrentFilters?.PropertyType) ? "selected" : "")>All</option>
+                            <option value="TOWNHOUSE" @(Model.CurrentFilters?.PropertyType == "TOWNHOUSE" ? "selected" : "")>Townhouse</option>
+                            <option value="CONDO" @(Model.CurrentFilters?.PropertyType == "CONDO" ? "selected" : "")>Condo</option>
+                            <option value="SINGLE_FAMILY" @(Model.CurrentFilters?.PropertyType == "SINGLE_FAMILY" ? "selected" : "")>Single Family</option>
+                            <option value="APARTMENT" @(Model.CurrentFilters?.PropertyType == "APARTMENT" ? "selected" : "")>Apartment</option>
+                            <option value="MULTI_FAMILY" @(Model.CurrentFilters?.PropertyType == "MULTI_FAMILY" ? "selected" : "")>Multi-Family</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="minPrice">Min Price:</label>
+                        <input type="text" id="minPrice" name="minPrice" class="form-control" placeholder="$0.00" value="@(Model.CurrentFilters?.MinPrice ?? 0)" />
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="maxPrice">Max Price:</label>
+                        <input type="text" id="maxPrice" name="maxPrice" class="form-control" placeholder="$0.00" value="@(Model.CurrentFilters?.MaxPrice ?? 0)" />
+                    </div>
+                    <div class="form-group col-md-2 d-flex align-items-end">
+                        <input type="submit" value="Filter" class="btn btn-primary w-100" />
+                    </div>
+                </div>
+            }
+        </div>
+
+    }
     <!-- Main Content -->
     <div id="content">
 
@@ -16,59 +66,13 @@
                 <h6 class="m-0 font-weight-bold text-primary">Property Count: @Model.Pagination.TotalCount.ToString("N0")</h6>
             </div>
             <div class="card shadow">
-                <div class="card-header">
-                    @using (Html.BeginForm("Index", "RentalListings", FormMethod.Get, new { @class = "row g-3 align-items-center" }))
-                    {
-                        <div class="row">
-                            <div class="form-group col-md-3">
-                                <label for="stateFilter">State:</label>
-                                @Html.DropDownList("stateFilter", Model.StateList, "Select State", new { @class = "form-control", @id = "stateFilter" })
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="countySelector">County:</label>
-                                <select id="countySelector" name="countyFilter" class="form-control">
-                                    <option value="">Select a state first</option>
-                                    @if (Model.CountyList != null)
-                                    {
-                                        foreach (var item in Model.CountyList)
-                                        {
-                                            <option value="@item.Value" @(item.Value == Model.SelectedCounty ? "selected" : "")>@item.Text</option>
-                                        }
-                                    }
-                                </select>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="propType">Property Type:</label>
-                                <select name="propertyTypeFilter" class="form-control">
-                                    <option value="" @(string.IsNullOrEmpty(Model.CurrentFilters?.PropertyType) ? "selected" : "")>All</option>
-                                    <option value="TOWNHOUSE" @(Model.CurrentFilters?.PropertyType == "TOWNHOUSE" ? "selected" : "")>Townhouse</option>
-                                    <option value="CONDO" @(Model.CurrentFilters?.PropertyType == "CONDO" ? "selected" : "")>Condo</option>
-                                    <option value="SINGLE_FAMILY" @(Model.CurrentFilters?.PropertyType == "SINGLE_FAMILY" ? "selected" : "")>Single Family</option>
-                                    <option value="APARTMENT" @(Model.CurrentFilters?.PropertyType == "APARTMENT" ? "selected" : "")>Apartment</option>
-                                    <option value="MULTI_FAMILY" @(Model.CurrentFilters?.PropertyType == "MULTI_FAMILY" ? "selected" : "")>Multi-Family</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="minPrice">Min Price:</label>
-                                <input type="text" id="minPrice" name="minPrice" class="form-control" placeholder="$0.00" value="@(Model.CurrentFilters?.MinPrice ?? 0)" />
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label for="maxPrice">Max Price:</label>
-                                <input type="text" id="maxPrice" name="maxPrice" class="form-control" placeholder="$0.00" value="@(Model.CurrentFilters?.MaxPrice ?? 0)" />
-                            </div>
-                            <div class="form-group col-md-2 d-flex align-items-end">
-                                <input type="submit" value="Filter" class="btn btn-primary w-100" />
-                            </div>
-                        </div>
-                    }
-                </div>
-
-                <div class="card-body">
-                    <div class="table-responsive">
+               @*  <div class="card-body"> *@
+                    <div class="table table-bordered table-hover table-sm modern-table w-100">
                         @using (Html.BeginForm("CompareProperties", "RentalListings", FormMethod.Post))
                         {
                             <table class="table table-bordered table-hover table-sm modern-table w-100">
-                                <thead class="thead-light">
+
+                            <thead style="position: sticky; top: 0; z-index: 10; background-color: #fff;">
                                     <tr>
                                         <th>Property Selector</th>
                                         <th>Thumbnail</th>
@@ -197,7 +201,7 @@
                         </div>
                         <!-- END: Updated Pagination Logic -->
                     </div>
-                </div>
+               @*  </div> *@
 
             </div>
         </div>
@@ -206,64 +210,38 @@
 
 
         <script>
-                    $(document).ready(function () {
-            // // Format Min and Max Price as USD on blur
-            // $('#minPrice, #maxPrice').on('blur', function () {
-            //     let value = $(this).val().replace(/[^0-9.]/g, ''); // Remove non-numeric characters
-            //     if (value) {
-            //         value = parseFloat(value).toLocaleString('en-US', {
-            //             style: 'currency',
-            //             currency: 'USD',
-            //             minimumFractionDigits: 2
-            //         });
-            //         $(this).val(value);
-            //     }
-            // });
+           $(document).ready(function () 
+            {
 
-            // // Remove formatting for editing on focus
-            // $('#minPrice, #maxPrice').on('focus', function () {
-            //     let value = $(this).val().replace(/[^0-9.]/g, ''); // Remove currency symbols and commas
-            //     $(this).val(value); // Show plain number for editing
-            // });
-
-            // // **New: Strip formatting before form submission**
-            // $('form').on('submit', function () {
-            //     $('#minPrice, #maxPrice').each(function () {
-            //         let value = $(this).val().replace(/[^0-9.]/g, ''); // Remove formatting
-            //         $(this).val(value); // Update input with plain number
-            //     });
-            // });
-
-            // County dropdown AJAX logic remains unchanged
-            $('#stateFilter').change(function () {
-                var selectedState = $(this).val();
-                if (selectedState) {
-                    $('#countySelector').prop('disabled', true); // Disable while loading
-                    $.ajax({
-                        url: '@Url.Action("GetCounties", "RentalListings")',
-                        type: 'GET',
-                        dataType: 'json',
-                        data: { stateCode: selectedState },
-                        success: function (counties) {
-                            $('#countySelector').empty().append('<option value="">Select County</option>');
-                            $.each(counties, function (index, county) {
-                                $('#countySelector').append($('<option></option>').val(county.value).text(county.text));
-                            });
-                            $('#countySelector').prop('disabled', false);
-                        },
-                        error: function () {
-                            alert('Error loading counties!');
-                            $('#countySelector').prop('disabled', false);
-                        }
-                    });
-                } else {
-                    $('#countySelector').empty().append('<option value="">Select a state first</option>');
-                }
+                $('#stateFilter').change(function () {
+                    var selectedState = $(this).val();
+                    if (selectedState) {
+                        $('#countySelector').prop('disabled', true); // Disable while loading
+                        $.ajax({
+                            url: '@Url.Action("GetCounties", "RentalListings")',
+                            type: 'GET',
+                            dataType: 'json',
+                            data: { stateCode: selectedState },
+                            success: function (counties) {
+                                $('#countySelector').empty().append('<option value="">Select County</option>');
+                                $.each(counties, function (index, county) {
+                                    $('#countySelector').append($('<option></option>').val(county.value).text(county.text));
+                                });
+                                $('#countySelector').prop('disabled', false);
+                            },
+                            error: function () {
+                                alert('Error loading counties!');
+                                $('#countySelector').prop('disabled', false);
+                            }
+                        });
+                    } else {
+                        $('#countySelector').empty().append('<option value="">Select a state first</option>');
+                    }
+                });
             });
-        });
 
         </script>
 
-    </div>
+    
 
 
