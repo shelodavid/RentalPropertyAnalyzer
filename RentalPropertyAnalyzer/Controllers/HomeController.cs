@@ -152,7 +152,13 @@ namespace RentalPropertyAnalyzer.Controllers
                     command.CommandText = "EXEC dbo.GetSavedPropertiesCount";
                     connection.Open();
 
-                    int savedPropertiesCount = (int)command.ExecuteScalar();
+                    var scalarResult = command.ExecuteScalar();
+                    if (scalarResult == null || scalarResult == DBNull.Value)
+                    {
+                        throw new InvalidOperationException("Saved properties count query returned no value.");
+                    }
+
+                    int savedPropertiesCount = Convert.ToInt32(scalarResult);
 
                     // Pass the count to the view using ViewBag
                     ViewBag.SavedPropertiesCount = savedPropertiesCount;
