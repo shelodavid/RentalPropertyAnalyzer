@@ -54,7 +54,7 @@ namespace RentalPropertyAnalyzer.Controllers
                 }
                 catch (Exception ex)
                 {
-
+                    _logger.LogError(ex, "Error occurred while retrieving saved properties count.");
                 }
               
 
@@ -64,6 +64,7 @@ namespace RentalPropertyAnalyzer.Controllers
             
             catch (Exception ex) 
             {
+                _logger.LogError(ex, "Error occurred while retrieving saved properties.");
                 return RedirectToAction("ErrorView"); // Redirect to a view that shows an error message
             }
 
