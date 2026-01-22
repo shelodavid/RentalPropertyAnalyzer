@@ -26,7 +26,7 @@ namespace RentalPropertyAnalyzer.Controllers
 
 
         [HttpGet]
-        public IActionResult Index(string propertyTypeFilter, string stateFilter, string countyFilter,string ZipCodeSortParam, int minPrice, int maxPrice, int pageNumber = 1, int pageSize = 40, string sortOrder = "")
+        public IActionResult Index(string? propertyTypeFilter, string? stateFilter, string? countyFilter, string? ZipCodeSortParam, int minPrice, int maxPrice, int pageNumber = 1, int pageSize = 40, string? sortOrder = "")
         {
             ViewBag.StateFilter = stateFilter;
             ViewBag.CountyFilter = countyFilter;
@@ -122,7 +122,7 @@ namespace RentalPropertyAnalyzer.Controllers
 
             // Fetch the list of states using the StateService
             var states = _stateService.GetStates();
-            string selectedState = Request.Query["stateFilter"];
+            string? selectedState = Request.Query["stateFilter"];
 
             //Fetch County
 
@@ -173,20 +173,20 @@ namespace RentalPropertyAnalyzer.Controllers
 
                     var comparableProperty = new ComparableProperty
                     {
-                        ZipID = calculatedData.ZipID,
-                        StreetAddress =calculatedData.StreetAddress,
-                        PropertyType=calculatedData.PropertyType,
-                        Bathrooms=calculatedData.Bathrooms,
-                        Bedrooms=calculatedData.Bedrooms,
+                        ZipID = calculatedData!.ZipID,
+                        StreetAddress = calculatedData.StreetAddress,
+                        PropertyType = calculatedData.PropertyType,
+                        Bathrooms = calculatedData.Bathrooms,
+                        Bedrooms = calculatedData.Bedrooms,
                         ImgSrc = calculatedData.ImgSrc,
                         Price = calculatedData.Price,
-                        TaxAssessedValue=calculatedData.TaxAssessedValue,
-                        Downpayment=calculatedData.Downpayment,
-                        EstimatedMortgageCost=calculatedData.EstimatedMortgageCost,
+                        TaxAssessedValue = calculatedData.TaxAssessedValue,
+                        Downpayment = calculatedData.Downpayment,
+                        EstimatedMortgageCost = calculatedData.EstimatedMortgageCost,
                         EstimatedInsuranceCost = calculatedData.EstimatedInsuranceCost,
                         EstimatedRent = calculatedData.EstimatedRent,
-                        HOAEstimate=calculatedData.HOAEstimate,
-                        MonthlyPMI=calculatedData.MonthlyPMI
+                        HOAEstimate = calculatedData.HOAEstimate,
+                        MonthlyPMI = calculatedData.MonthlyPMI
 
                     };
 
@@ -207,13 +207,14 @@ namespace RentalPropertyAnalyzer.Controllers
             .AsEnumerable() // or AsNoTracking()
             .FirstOrDefault();
 
-                return calculatedData;
+                return calculatedData!;
 
 
             }
             catch(Exception ex)
             {
-                return null;
+                _logger.LogError(ex, "Error occurred while fetching calculated property data for Zpid: {Zpid}", Zpid);
+                return null!;
             }
            
         }
