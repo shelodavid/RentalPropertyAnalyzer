@@ -14,6 +14,47 @@
 {
     @section SlidersSection
 {
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    // Hidden fields to preserve property information
+    @Html.HiddenFor(m => m.ZipID)
+    @Html.HiddenFor(m => m.Price)
+    @Html.HiddenFor(m => m.TaxAssessedValue)
+    @Html.HiddenFor(m => m.StreetAddress)
+    @Html.HiddenFor(m => m.PropertyType)
+    @Html.HiddenFor(m => m.Bedrooms)
+    @Html.HiddenFor(m => m.Bathrooms)
+    @Html.HiddenFor(m => m.ImgSrc)
+
+    @section PurchaseOverviewSection
+    {
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h4>Property Purchase Overview</h4>
+        </div>
+
+        <div class="col-md-3">
+            <img src="@Model.ImgSrc" alt="Property Image" class="card-img-top">
+        </div>
+        <div class="col-md-4">
+            <p><strong>Address:</strong> @Model.StreetAddress</p>
+            <p><strong>Property Type:</strong> @Model.PropertyType</p>
+            <p><strong>Bedrooms 🛏️:</strong> @Model.Bedrooms</p>
+            <p><strong>Bathrooms 🛁:</strong> @Model.Bathrooms</p>
+        </div>
+        <div class="col-md-4">
+            <p><strong>Price:</strong> @Model.Price.ToString("C")</p>
+            <p><strong>Interest Rate:</strong> @Model.MortgageInterestRate.ToString("F2") %</p>
+            <p><strong>Mortgage Term:</strong> @Model.Term years</p>
+            <p><strong>Downpayment:</strong> @Model.DownpaymentPercentage.ToString("F2") %</p>
+            <p><strong>Monthly Payment (P&I):</strong> @Model.EstimatedMortgageCost.ToString("C")</p>
+        </div>
+    </div>
+
+    }
+   
+    @section ControlsSection
+    {
     <div class="container-fluid">
         <div class="row">
             <!-- COLUMN 1: 4 Sliders -->
@@ -27,6 +68,7 @@
                            class="form-range"
                            oninput="this.nextElementSibling.value = parseFloat(this.value).toFixed(2)" />
                     <output>@Model.DownpaymentPercentage.ToString("F2")</output>
+                    <span asp-validation-for="DownpaymentPercentage" class="text-danger"></span>
                 </div>
 
                 <!-- Slider 2: Mortgage Interest Rate -->
@@ -34,10 +76,11 @@
                     <label asp-for="MortgageInterestRate">Mortgage Interest Rate (%)</label>
                     <input type="range"
                            asp-for="MortgageInterestRate"
-                           min="0" max="20" step="0.1"
+                           min="0.1" max="20" step="0.1"
                            class="form-range"
                            oninput="this.nextElementSibling.value = parseFloat(this.value).toFixed(2)" />
                     <output>@Model.MortgageInterestRate.ToString("F2")</output>
+                    <span asp-validation-for="MortgageInterestRate" class="text-danger"></span>
                 </div>
 
                 <!-- Slider 3: Term -->
@@ -45,10 +88,11 @@
                     <label asp-for="Term">Mortgage Term (Years)</label>
                     <input type="range"
                            asp-for="Term"
-                           min="0" max="30" step="1"
+                           min="1" max="30" step="1"
                            class="form-range"
                            oninput="this.nextElementSibling.value = this.value" />
                     <output>@Model.Term</output>
+                    <span asp-validation-for="Term" class="text-danger"></span>
                 </div>
 
                 <!-- Slider 4: Loan Origination Fee -->
@@ -146,6 +190,14 @@
                 </div>
             </div>
             <!-- END COLUMN 3 -->
+        </div>
+
+        <!-- A recalculate (or save) button that posts the form -->
+
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">Recalculate</button>
+            </div>
         </div>
     </div>
     }
