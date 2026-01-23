@@ -6,7 +6,14 @@
 }
 
 <div class="container-fluid">
-    @await Html.PartialAsync("Partials/_PageHeader", ("Property Search", "Filter listings and compare properties", (Microsoft.AspNetCore.Html.IHtmlContent?)null), viewData: null)
+    @await Html.PartialAsync(
+    "Partials/_PageHeader",
+    (Title: "Property Search",
+     Subtitle: "Filter listings and compare properties",
+     Actions: (Microsoft.AspNetCore.Html.IHtmlContent?)null),
+    viewData: null
+)
+
 
     <div class="d-flex align-items-center justify-content-between mb-3">
         <h2 class="h6 mb-0 text-primary">Property Count: @Model.Pagination.TotalCount.ToString("N0")</h2>
@@ -196,34 +203,7 @@
 
 <script>
     $(document).ready(function () {
-            // // Format Min and Max Price as USD on blur
-            // $('#minPrice, #maxPrice').on('blur', function () {
-            //     let value = $(this).val().replace(/[^0-9.]/g, ''); // Remove non-numeric characters
-            //     if (value) {
-            //         value = parseFloat(value).toLocaleString('en-US', {
-            //             style: 'currency',
-            //             currency: 'USD',
-            //             minimumFractionDigits: 2
-            //         });
-            //         $(this).val(value);
-            //     }
-            // });
-
-            // // Remove formatting for editing on focus
-            // $('#minPrice, #maxPrice').on('focus', function () {
-            //     let value = $(this).val().replace(/[^0-9.]/g, ''); // Remove currency symbols and commas
-            //     $(this).val(value); // Show plain number for editing
-            // });
-
-            // // **New: Strip formatting before form submission**
-            // $('form').on('submit', function () {
-            //     $('#minPrice, #maxPrice').each(function () {
-            //         let value = $(this).val().replace(/[^0-9.]/g, ''); // Remove formatting
-            //         $(this).val(value); // Update input with plain number
-            //     });
-            // });
-
-            // County dropdown AJAX logic remains unchanged
+          
         $('#stateFilter').change(function () {
             var selectedState = $(this).val();
             if (selectedState) {
