@@ -99,6 +99,27 @@ body {
   padding: 1.5rem;
 }
 
+.app-section {
+  padding: 0;
+}
+
+.page-header {
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 1rem;
+}
+
+.page-header__actions .btn + .btn {
+  margin-left: 0.5rem;
+}
+
+.stat-card .h4 {
+  font-weight: 700;
+}
+
+.form-row-group + .form-row-group {
+  margin-top: 1rem;
+}
+
 .app-sliders:empty {
   display: none;
 }

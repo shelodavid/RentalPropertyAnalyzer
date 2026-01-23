@@ -201,6 +201,8 @@
         These references won't compile unless you add them to
         InvestmentProfile or create a combined ViewModel that has them.
     -->
+    @await Html.PartialAsync("Partials/_PageHeader", ("Purchase Sheet", "Review purchase details and closing costs", (string?)null), viewData: null)
+
     <div class="row g-4 mb-4">
         <!-- Property Image -->
         <div class="col-md-3">

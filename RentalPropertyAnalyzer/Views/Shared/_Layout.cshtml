@@ -2,27 +2,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
     <title>@((ViewData["Title"] as string) ?? "Rental Property Analyzer") - Rental Property Analyzer</title>
-
-    <!-- Stylesheets -->
+    <!-- Stylesheets and Scripts -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/all.min.css" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Add this line to include Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
     <link href="https://cdn.datatables.net/v/dt/dt-1.13.8/datatables.min.css" rel="stylesheet" />
     <link href="~/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" />
-
-    @RenderSection("Head", required: false)
 </head>
-
 <body class="app-body">
     <div class="app-shell d-flex flex-column flex-lg-row">
         <nav class="app-sidebar">
@@ -31,7 +31,6 @@
                     <span class="app-sidebar__icon"><i class="fas fa-home"></i></span>
                     <span>My Properties</span>
                 </a>
-
                 <ul class="nav flex-column gap-1">
                     <li class="nav-item">
                         <a class="nav-link" href="~/rentallistings">
@@ -58,63 +57,54 @@
             </header>
 
             <main class="app-main flex-grow-1">
-                @* Optional "slots" for specific pages (Purchase Sheet, listings filters, etc.) *@
                 @if (IsSectionDefined("StatsSection"))
                 {
-                    <div class="mb-3">
-                        @await RenderSectionAsync("StatsSection")
-                    </div>
+                    <section class="app-section mb-4">
+                        @await RenderSectionAsync("StatsSection", required: false)
+                    </section>
                 }
-
                 @if (IsSectionDefined("FilterSection"))
                 {
-                    <div class="mb-3">
-                        @await RenderSectionAsync("FilterSection")
-                    </div>
+                    <section class="app-section mb-4">
+                        @await RenderSectionAsync("FilterSection", required: false)
+                    </section>
                 }
-
                 @if (IsSectionDefined("PurchaseOverviewSection"))
                 {
-                    <div class="mb-3">
-                        @await RenderSectionAsync("PurchaseOverviewSection")
-                    </div>
+                    <section class="app-section mb-4">
+                        @await RenderSectionAsync("PurchaseOverviewSection", required: false)
+                    </section>
                 }
-
                 @if (IsSectionDefined("ControlsSection"))
                 {
-                    <div class="mb-3">
-                        @await RenderSectionAsync("ControlsSection")
-                    </div>
+                    <section class="app-section mb-4">
+                        @await RenderSectionAsync("ControlsSection", required: false)
+                    </section>
                 }
-
-                @* Back-compat: some pages use SlidersSection *@
                 @if (IsSectionDefined("SlidersSection"))
                 {
-                    <div class="app-sliders mb-4">
-                        @await RenderSectionAsync("SlidersSection")
-                    </div>
+                    <section class="app-section mb-4">
+                        @await RenderSectionAsync("SlidersSection", required: false)
+                    </section>
                 }
-
                 @RenderBody()
             </main>
         </div>
     </div>
 
     <footer class="app-footer">
-        @RenderSection("Footer", required: false)
+        <!-- Footer content if needed -->
     </footer>
 
-    <!-- Scripts -->
+    <!-- Optional JavaScript -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Optional page plugins -->
+    <!-- Page level plugins -->
     <script src="~/vendor/chart.js/Chart.min.js"></script>
 
     <!-- Optional page scripts -->
     <script src="~/js/chart-area-demo.js"></script>
     <script src="~/js/chart-pie-demo.js"></script>
-
-    @RenderSection("Scripts", required: false)
 </body>
 </html>
