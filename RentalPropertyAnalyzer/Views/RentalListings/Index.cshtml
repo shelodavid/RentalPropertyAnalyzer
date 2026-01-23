@@ -6,7 +6,7 @@
 }
 
 <div class="container-fluid">
-    @await Html.PartialAsync("Partials/_PageHeader", ("Property Search", "Filter listings and compare properties", (string?)null), viewData: null)
+    @await Html.PartialAsync("Partials/_PageHeader", ("Property Search", "Filter listings and compare properties", (Microsoft.AspNetCore.Html.IHtmlContent?)null), viewData: null)
 
     <div class="d-flex align-items-center justify-content-between mb-3">
         <h2 class="h6 mb-0 text-primary">Property Count: @Model.Pagination.TotalCount.ToString("N0")</h2>
