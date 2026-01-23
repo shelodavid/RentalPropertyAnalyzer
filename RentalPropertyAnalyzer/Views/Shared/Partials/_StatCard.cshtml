@@ -1,0 +1,14 @@
+@model (string Label, string Value, string? IconClass)
+
+<div class="card shadow-sm h-100 stat-card">
+    <div class="card-body d-flex align-items-center justify-content-between">
+        <div>
+            <div class="text-uppercase text-muted small fw-semibold">@Model.Label</div>
+            <div class="h4 mb-0">@Model.Value</div>
+        </div>
+        @if (!string.IsNullOrWhiteSpace(Model.IconClass))
+        {
+            <span class="text-primary"><i class="@Model.IconClass fa-2x"></i></span>
+        }
+    </div>
+</div>

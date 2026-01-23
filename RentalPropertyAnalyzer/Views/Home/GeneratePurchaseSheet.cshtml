@@ -19,7 +19,7 @@
             <!-- COLUMN 1: 4 Sliders -->
             <div class="col-md-4">
                 <!-- Slider 1: Downpayment Percentage -->
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label asp-for="DownpaymentPercentage">Downpayment Percentage</label>
                     <input type="range"
                            asp-for="DownpaymentPercentage"
@@ -30,7 +30,7 @@
                 </div>
 
                 <!-- Slider 2: Mortgage Interest Rate -->
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label asp-for="MortgageInterestRate">Mortgage Interest Rate (%)</label>
                     <input type="range"
                            asp-for="MortgageInterestRate"
@@ -41,7 +41,7 @@
                 </div>
 
                 <!-- Slider 3: Term -->
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label asp-for="Term">Mortgage Term (Years)</label>
                     <input type="range"
                            asp-for="Term"
@@ -52,7 +52,7 @@
                 </div>
 
                 <!-- Slider 4: Loan Origination Fee -->
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label asp-for="LoanOriginationFee">Loan Origination Fee</label>
                     <input type="range"
                            asp-for="LoanOriginationFee"
@@ -66,7 +66,7 @@
             <!-- COLUMN 2: 4 Sliders -->
             <div class="col-md-4">
                 <!-- Slider 5: Appraisal Fee -->
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label asp-for="AppraisalFee">Appraisal Fee</label>
                     <input type="range"
                            asp-for="AppraisalFee"
@@ -77,7 +77,7 @@
                 </div>
 
                 <!-- Slider 6: Credit Report Fee -->
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label asp-for="CreditReportFee">Credit Report Fee</label>
                     <input type="range"
                            asp-for="CreditReportFee"
@@ -88,7 +88,7 @@
                 </div>
 
                 <!-- Slider 7: Title Insurance Cost -->
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label asp-for="TitleInsuranceCost">Title Insurance Cost</label>
                     <input type="range"
                            asp-for="TitleInsuranceCost"
@@ -99,7 +99,7 @@
                 </div>
 
                 <!-- Slider 8: Title Search Fee -->
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label asp-for="TitleSearchFee">Title Search Fee</label>
                     <input type="range"
                            asp-for="TitleSearchFee"
@@ -113,7 +113,7 @@
             <!-- COLUMN 3: 3 Sliders -->
             <div class="col-md-4">
                 <!-- Slider 9: Escrow Fee -->
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label asp-for="EscrowFee">Escrow Fee</label>
                     <input type="range"
                            asp-for="EscrowFee"
@@ -124,7 +124,7 @@
                 </div>
 
                 <!-- Slider 10: Flood Inspection Fee -->
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label asp-for="FloodInspectionFee">Flood Inspection Fee</label>
                     <input type="range"
                            asp-for="FloodInspectionFee"
@@ -135,7 +135,7 @@
                 </div>
 
                 <!-- Slider 11: Miscellaneous Fees -->
-                <div class="form-group mb-3">
+                <div class="mb-3">
                     <label asp-for="MiscellaneousFees">Miscellaneous Fees</label>
                     <input type="range"
                            asp-for="MiscellaneousFees"
@@ -156,97 +156,99 @@
         These references won't compile unless you add them to
         InvestmentProfile or create a combined ViewModel that has them.
     -->
-    <div class="row mb-4">
+    @await Html.PartialAsync("Partials/_PageHeader", ("Purchase Sheet", "Review purchase details and closing costs", (Microsoft.AspNetCore.Html.IHtmlContent?)null), viewData: null)
+
+    <div class="row g-4 mb-4">
         <!-- Property Image -->
         <div class="col-md-3">
             <!-- 'ImgSrc' is not in InvestmentProfile by default -->
-            <img src="@Model.ImgSrc" alt="Property Image" class="card-img-top">
+            <img src="@Model.ImgSrc" alt="Property Image" class="property-image">
         </div>
 
         <!-- Property Information -->
         <div class="col-md-4">
             <!-- 'StreetAddress', 'PropertyType', 'Bedrooms', etc. are not in InvestmentProfile -->
-            <p><strong>Address:</strong> @Model.StreetAddress</p>
-            <p><strong>Property Type:</strong> @Model.PropertyType</p>
-            <p><strong>Bedrooms 🛏️ :</strong> @Model.Bedrooms </p>
-            <p><strong>Bathrooms 🛁 :</strong> @Model.Bathrooms </p>
+            <p class="mb-1"><strong>Address:</strong> @Model.StreetAddress</p>
+            <p class="mb-1"><strong>Property Type:</strong> @Model.PropertyType</p>
+            <p class="mb-1"><strong>Bedrooms 🛏️ :</strong> @Model.Bedrooms </p>
+            <p class="mb-0"><strong>Bathrooms 🛁 :</strong> @Model.Bathrooms </p>
         </div>
 
         <div class="col-md-4">
             <!-- 'Price' does not exist in InvestmentProfile by default -->
-            <p><strong>Price:</strong> @Model.Price.ToString("C")</p>
-            <p><strong>Interest Rate:</strong> @Model.MortgageInterestRate %</p>
-            <p><strong>Mortgage Term (Years):</strong> @Model.Term</p>
-            <p><strong>Downpayment Percentage:</strong> @Model.DownpaymentPercentage %</p>
+            <p class="mb-1"><strong>Price:</strong> @Model.Price.ToString("C")</p>
+            <p class="mb-1"><strong>Interest Rate:</strong> @Model.MortgageInterestRate %</p>
+            <p class="mb-1"><strong>Mortgage Term (Years):</strong> @Model.Term</p>
+            <p class="mb-1"><strong>Downpayment Percentage:</strong> @Model.DownpaymentPercentage %</p>
             <!-- 'TaxAssessedValue' also not in InvestmentProfile by default -->
-            <p><strong>Tax Assessed Value:</strong> @Model.TaxAssessedValue.ToString("C")</p>
+            <p class="mb-0"><strong>Tax Assessed Value:</strong> @Model.TaxAssessedValue.ToString("C")</p>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-12">
-            <h3>Itemized Closing Costs</h3>
-            <table class="table table-striped costs-table">
+            <h3 class="h5 mb-3">Itemized Closing Costs</h3>
+            <table class="table table-striped table-hover align-middle table-app costs-table">
                 <thead>
                     <tr>
                         <th>Item</th>
                         <th></th>
-                        <th rowspan="2" style="text-align:center">Amount (USD)</th>
+                        <th rowspan="2" class="text-center">Amount (USD)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>Purchase Price</td>
                         <td></td>
-                        <td style="text-align: center;">@Model.Price.ToString("C")</td>
+                        <td class="text-center">@Model.Price.ToString("C")</td>
                     </tr>
                     <tr>
                         <td>Less Downpayment</td>
                         <!-- 'Downpayment' property is not in InvestmentProfile by default -->
-                        <td style="text-align: center;">@Model.Downpayment.ToString("C")</td>
+                        <td class="text-center">@Model.Downpayment.ToString("C")</td>
                         <td></td>
                     </tr>
                     <tr>
                         <td>Mortgage Amount</td>
                         <td></td>
-                        <td style="text-align: center;">@Model.MortgageAmount.ToString("C")</td>
+                        <td class="text-center">@Model.MortgageAmount.ToString("C")</td>
                     </tr>
 
                     <tr class="total-row">
-                        <td style="color:black">Fees and Other Closing Costs</td>
+                        <td class="text-dark">Fees and Other Closing Costs</td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td>Home Appraisal Fee</td>
-                        <td style="text-align: center;">@Model.AppraisalFee.ToString("C")</td>
+                        <td class="text-center">@Model.AppraisalFee.ToString("C")</td>
                         <td></td>
                     </tr>
                     <tr>
                         <td>Escrow Fee</td>
-                        <td style="text-align: center;">@Model.EscrowFee.ToString("C")</td>
+                        <td class="text-center">@Model.EscrowFee.ToString("C")</td>
                         <td></td>
                     </tr>
                     <tr>
                         <td>Flood Inspection Fee</td>
-                        <td style="text-align: center;">@Model.FloodInspectionFee.ToString("C")</td>
+                        <td class="text-center">@Model.FloodInspectionFee.ToString("C")</td>
                         <td></td>
                     </tr>
                     <tr>
                         <td>Loan Origination Fee</td>
-                        <td style="text-align: center;">@Model.LoanOriginationFee.ToString("C")</td>
+                        <td class="text-center">@Model.LoanOriginationFee.ToString("C")</td>
                         <td></td>
                     </tr>
                     <tr>
                         <td>Title Inspection Fee</td>
-                        <td style="text-align: center;">@Model.TitleInsuranceCost.ToString("C")</td>
+                        <td class="text-center">@Model.TitleInsuranceCost.ToString("C")</td>
                         <td></td>
                     </tr>
 
                     <!-- 'TotalCost' not in InvestmentProfile by default -->
                     <tr class="total-row">
                         <td>Cash to Close</td>
-                        <td style="text-align: center;">@Model.TotalCost.ToString("C")</td>
+                        <td class="text-center">@Model.TotalCost.ToString("C")</td>
                         <td></td>
                     </tr>
                 </tbody>
@@ -254,8 +256,8 @@
         </div>
     </div>
 
-    <!-- A recalculate (or save) button that posts the form -->
-    <button type="submit" class="btn btn-primary">Recalculate</button>
-
-    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Back to Home</a>
+    <div class="d-flex flex-wrap gap-2">
+        <button type="submit" class="btn btn-primary">Recalculate</button>
+        <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Back to Home</a>
+    </div>
 }

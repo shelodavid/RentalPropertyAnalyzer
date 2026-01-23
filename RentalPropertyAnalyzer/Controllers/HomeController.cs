@@ -43,7 +43,13 @@ namespace RentalPropertyAnalyzer.Controllers
                     command.CommandText = "EXEC dbo.GetSavedPropertiesCount";
                     connection.Open();
 
-                    int savedPropertiesCount = (int)command.ExecuteScalar();
+                    var scalarResult = command.ExecuteScalar();
+                    if (scalarResult == null || scalarResult == DBNull.Value)
+                    {
+                        throw new InvalidOperationException("Saved properties count query returned no value.");
+                    }
+
+                    int savedPropertiesCount = Convert.ToInt32(scalarResult);
 
                     // Pass the count to the view using ViewBag
                     ViewBag.SavedPropertiesCount = savedPropertiesCount;
@@ -54,7 +60,7 @@ namespace RentalPropertyAnalyzer.Controllers
                 }
                 catch (Exception ex)
                 {
-
+                    _logger.LogError(ex, "Error occurred while retrieving saved properties count.");
                 }
               
 
@@ -64,6 +70,7 @@ namespace RentalPropertyAnalyzer.Controllers
             
             catch (Exception ex) 
             {
+                _logger.LogError(ex, "Error occurred while retrieving saved properties.");
                 return RedirectToAction("ErrorView"); // Redirect to a view that shows an error message
             }
 
