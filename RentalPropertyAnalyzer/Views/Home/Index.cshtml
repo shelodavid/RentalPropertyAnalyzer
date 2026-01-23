@@ -1,152 +1,80 @@
 ﻿ @model List<RentalPropertyAnalyzer.Models.SavedProperties> 
 @{
-    ViewData["Title"] = "Home Page - Rental Property Analyzer";
-}
-
-@{
+    ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-<html lang="en">
+@section StatsSection
+{
+    <div class="row g-3">
+        <div class="col-xl-3 col-md-6">
+            @await Html.PartialAsync("Partials/_StatCard", ("Saved Properties", (ViewBag.SavedPropertiesCount ?? 0).ToString(), "fas fa-home"), viewData: null)
+        </div>
+    </div>
+}
 
+<div class="container-fluid">
+    @await Html.PartialAsync("Partials/_PageHeader", ("Home", "Saved properties overview", (string?)null), viewData: null)
 
-
-<body id="page-top">
-
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-
-
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
-            <div id="content">
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-
-                    <!-- Page Heading -->
-                    <!-- Content Row -->
-                    <div class="row">
-
-
-                        <!-- Saved Properties Count -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
+    <div class="card shadow-sm">
+        <div class="card-header bg-white">
+            <h2 class="h6 mb-0">Saved Properties</h2>
+        </div>
+        <div class="card-body">
+            <div class="row g-4">
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var property in Model)
+                    {
+                        <div class="col-lg-4 col-md-6">
+                            <div class="card h-100 shadow-sm">
+                                <img class="card-img-top" src="@property.ImgSrc" alt="Property Image">
                                 <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                                Sarai's' Properties
-                                            </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.SavedPropertiesCount</div>
-                                            
+                                    <a href="https://www.zillow.com/homedetails/@(property.ZipID + "_zpid/")" class="card-title d-block fw-semibold text-decoration-none" target="_blank">
+                                        @property.StreetAddress
+                                    </a>
+                                    <div class="row mt-3">
+                                        <div class="col-6">
+                                            <p class="card-text small mb-1">Price: $@property.Price</p>
+                                            <p class="card-text small mb-1">Downpayment: $@property.Downpayment</p>
+                                            <p class="card-text small mb-1">Bedrooms: @property.Bedrooms</p>
+                                            <p class="card-text small mb-0">Bathrooms: @property.Bathrooms</p>
                                         </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-home fa-2x text-gray-300"></i>
+                                        <div class="col-6">
+                                            <p class="card-text small mb-1">SP-TV Ratio: @property.TVSPRatio</p>
+                                            <p class="card-text small mb-1">Rent Estimate $: @property.EstimatedRent</p>
+                                            <p class="card-text small mb-1">Monthly Costs $: @property.EstimatedMonthlyCost</p>
+                                            <p class="card-text small mb-0">Monthly Profit $: @property.EstimatedMonthlyProfit</p>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                                <div class="card-footer bg-white d-flex justify-content-between gap-2">
+                                    <button
+                                        type="button"
+                                        class="btn btn-primary btn-sm"
+                                        onclick="location.href='@Url.Action("GeneratePurchaseSheet", "Home", new { zipID = property.ZipID })'">
+                                        Generate Purchase Sheet
+                                    </button>
 
-
-                    <!-- Content Row -->
-
-                    <div class="row">
-
-                        <!-- Area Chart -->
-                        <div class="col-xl-12 col-lg-7">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div class="card-header  d-flex flex-row align-items-center justify-content-between">
-                                   
- <div>
-    <div class="row">
-        @if (Model != null && Model.Any())
-        {
-            int counter = 0;
-            foreach (var property in Model)
-            {
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="@property.ImgSrc" alt="Property Image">
-                        <div class="card-body">
-                            <!-- Card Title Centered -->
-                            <a href="https://www.zillow.com/homedetails/@(property.ZipID + "_zpid/")" class="card-title text-center" target="_blank">@property.StreetAddress</a>
-                           
-                            <div class="row">
-                                <div class="col-6"> <!-- First column -->
-                                    <p class="card-text small">Price: $@property.Price</p>
-                                    <p class="card-text small">Downpayment: $@property.Downpayment</p>
-                                    <p class="card-text small">Bedrooms: @property.Bedrooms</p>
-                                    <p class="card-text small">Bathrooms: @property.Bathrooms</p>
-                                </div>
-                                <div class="col-6"> <!-- Second column -->
-                                    <p class="card-text small">SP-TV Ratio: @property.TVSPRatio</p>
-                                    <p class="card-text small">Rent Estimate $: @property.EstimatedRent</p>
-                                    <p class="card-text small">Monthly Costs $: @property.EstimatedMonthlyCost</p>
-                                    <p class="card-text small">Monthly Profit $: @property.EstimatedMonthlyProfit</p>
+                                    <a href="@Url.Action("DeleteProperty", new { zipID = property.ZipID })" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this property?');">
+                                        Delete Property
+                                    </a>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer d-flex justify-content-between">
-                        @*     <button type="button" class="btn btn-primary btn-sm">Generate Purchase Sheet</button> *@
-
-                        <button 
-                        type="button" 
-                        class="btn btn-primary btn-sm" 
-                        onclick="location.href='@Url.Action("GeneratePurchaseSheet", "Home", new { zipID = property.ZipID })'">
-                        Generate Purchase Sheet
-                        </button>
-
-                        <a href="@Url.Action("DeleteProperty", new { zipID = property.ZipID })" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this property?');">
-                                Delete Property
-                        </a>
-                        </div>
-                    </div>
-
-
-                </div>
-                if(++counter % 3 == 0) {
-                    @:</div><div class="row">
+                    }
                 }
-            }
-        }
-        else
-        {
-            <div class="col">
-                <p>No saved properties found.</p>
+                else
+                {
+                    <div class="col">
+                        <p class="text-muted">No saved properties found.</p>
+                    </div>
+                }
             </div>
-        }
+        </div>
     </div>
 </div>
-                                </div>
-                                <!-- Card Body -->
-
-                            </div>
-                        </div>
-                     
-                    </div>
-                </div>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
-
-        </div>
-
-    </div>
-
-</body>
-
-</html>
 
 
 
                    
-
-
-
-
