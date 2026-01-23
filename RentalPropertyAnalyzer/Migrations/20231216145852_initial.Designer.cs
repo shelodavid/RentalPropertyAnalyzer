@@ -13,7 +13,7 @@ namespace RentalPropertyAnalyzer.Migrations
 {
     [DbContext(typeof(RentalListingContext))]
     [Migration("20231216145852_initial")]
-    partial class initial
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

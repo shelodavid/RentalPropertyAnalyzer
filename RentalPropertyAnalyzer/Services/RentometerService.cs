@@ -23,7 +23,7 @@ namespace RentalPropertyAnalyzer.Services
             {
                 try
                 {
-                    string jsonReturned = response.Content;
+                    string jsonReturned = response.Content ?? string.Empty;
 
 
                 }

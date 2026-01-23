@@ -1,0 +1,112 @@
+@model RentalPropertyAnalyzer.Models.ViewModels.PropertyForecastViewModel
+
+@{
+    ViewData["Title"] = "ROI Forecast";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    @await Html.PartialAsync("Partials/_PageHeader", ("ROI Forecast", "Estimate monthly and annual returns", (Microsoft.AspNetCore.Html.IHtmlContent?)null), viewData: null)
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3 align-items-end">
+                <div class="col-md-6">
+                    <label class="form-label">Select Saved Property</label>
+                    <select class="form-select" name="zipID">
+                        @if (ViewBag.SavedProperties != null)
+                        {
+                            foreach (var property in (List<RentalPropertyAnalyzer.Models.SavedProperties>)ViewBag.SavedProperties)
+                            {
+                                var isSelected = property.ZipID == Model.ZipID;
+                                <option value="@property.ZipID" selected="@(isSelected ? "selected" : null)">
+                                    @property.StreetAddress
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary w-100">Update Forecast</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            @await Html.PartialAsync("Partials/_StatCard", ("Monthly Cashflow", Model.MonthlyNetCashflow.ToString("C"), "fas fa-coins"), viewData: null)
+        </div>
+        <div class="col-md-4">
+            @await Html.PartialAsync("Partials/_StatCard", ("Cash-on-Cash %", Model.CashOnCashReturnPct.ToString("N2") + "%", "fas fa-percentage"), viewData: null)
+        </div>
+        <div class="col-md-4">
+            @await Html.PartialAsync("Partials/_StatCard", ("Cap Rate %", Model.CapRatePct.ToString("N2") + "%", "fas fa-chart-line"), viewData: null)
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white">
+            <h3 class="h6 mb-0">Assumptions &amp; Breakdown</h3>
+        </div>
+        <div class="card-body">
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <h4 class="h6 text-muted">Property &amp; Financing</h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between"><span>Address</span><span>@Model.Address</span></li>
+                        <li class="list-group-item d-flex justify-content-between"><span>Price</span><span>@Model.Price.ToString("C")</span></li>
+                        <li class="list-group-item d-flex justify-content-between"><span>Rent (Monthly)</span><span>@Model.EstimatedRent.ToString("C")</span></li>
+                        <li class="list-group-item d-flex justify-content-between"><span>Downpayment</span><span>@Model.DownpaymentPercentage.ToString("N2")% (@Model.DownpaymentAmount.ToString("C"))</span></li>
+                        <li class="list-group-item d-flex justify-content-between"><span>Interest Rate</span><span>@Model.InterestRate.ToString("N2")%</span></li>
+                        <li class="list-group-item d-flex justify-content-between"><span>Term</span><span>@Model.TermYears years</span></li>
+                        <li class="list-group-item d-flex justify-content-between"><span>Monthly P&amp;I</span><span>@Model.MonthlyMortgagePI.ToString("C")</span></li>
+                        <li class="list-group-item d-flex justify-content-between"><span>Cash to Close</span><span>@Model.CashToClose.ToString("C")</span></li>
+                    </ul>
+                </div>
+                <div class="col-lg-6">
+                    <h4 class="h6 text-muted">Recurring Costs</h4>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between"><span>Property Taxes</span><span>@Model.MonthlyPropertyTaxes.ToString("C")</span></li>
+                        <li class="list-group-item d-flex justify-content-between"><span>Insurance</span><span>@Model.MonthlyInsurance.ToString("C")</span></li>
+                        <li class="list-group-item d-flex justify-content-between"><span>PMI</span><span>@Model.MonthlyPMI.ToString("C")</span></li>
+                        <li class="list-group-item d-flex justify-content-between"><span>Maintenance</span><span>@Model.MonthlyMaintenance.ToString("C")</span></li>
+                        <li class="list-group-item d-flex justify-content-between"><span>Utilities</span><span>@Model.MonthlyUtilities.ToString("C")</span></li>
+                        <li class="list-group-item d-flex justify-content-between"><span>HOA</span><span>@Model.MonthlyHOA.ToString("C")</span></li>
+                        <li class="list-group-item d-flex justify-content-between"><span>Management Fee</span><span>@Model.PropertyManagementFeeAmount.ToString("C")</span></li>
+                        <li class="list-group-item d-flex justify-content-between"><span>Vacancy</span><span>@Model.VacancyAmount.ToString("C")</span></li>
+                        <li class="list-group-item d-flex justify-content-between"><span>Total Monthly Expenses</span><span>@Model.MonthlyExpensesTotal.ToString("C")</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-white">
+            <h3 class="h6 mb-0">Outputs</h3>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="p-3 bg-light rounded">
+                        <div class="text-muted small">Monthly Net Cashflow</div>
+                        <div class="fw-semibold">@Model.MonthlyNetCashflow.ToString("C")</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3 bg-light rounded">
+                        <div class="text-muted small">Annual Net Cashflow</div>
+                        <div class="fw-semibold">@Model.AnnualNetCashflow.ToString("C")</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3 bg-light rounded">
+                        <div class="text-muted small">Break-even Rent</div>
+                        <div class="fw-semibold">@Model.BreakEvenRent.ToString("C")</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
