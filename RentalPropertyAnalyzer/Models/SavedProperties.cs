@@ -45,6 +45,11 @@ namespace RentalPropertyAnalyzer.Models
         {
             get
             {
+                if (TaxAssessedValue is null || Price is null)
+                {
+                    return null;
+                }
+
                 if (TaxAssessedValue == 0)
                 {
                     // Option 1: Return null if TaxAssessedValue is 0
@@ -55,7 +60,7 @@ namespace RentalPropertyAnalyzer.Models
                 }
                 else
                 {
-                    return Math.Round((decimal)(Price / TaxAssessedValue), 3, MidpointRounding.AwayFromZero);
+                    return Math.Round(Price.Value / TaxAssessedValue.Value, 3, MidpointRounding.AwayFromZero);
                 }
             }
         }

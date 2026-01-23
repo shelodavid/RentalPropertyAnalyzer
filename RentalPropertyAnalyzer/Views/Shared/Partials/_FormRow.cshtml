@@ -1,0 +1,11 @@
+@using Microsoft.AspNetCore.Html
+@model (string Label, IHtmlContent Input, IHtmlContent? Validation)
+
+<div class="form-row-group">
+    <label class="form-label">@Model.Label</label>
+    @Model.Input
+    @if (Model.Validation != null)
+    {
+        <div class="form-text text-danger">@Model.Validation</div>
+    }
+</div>
