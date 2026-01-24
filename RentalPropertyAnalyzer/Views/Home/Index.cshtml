@@ -8,7 +8,14 @@
 {
     <div class="row g-3">
         <div class="col-xl-3 col-md-6">
-            @await Html.PartialAsync("Partials/_StatCard", ("Saved Properties", (ViewBag.SavedPropertiesCount ?? 0).ToString(), "fas fa-home"), viewData: null)
+            @await Html.PartialAsync(
+                "Partials/_StatCard",
+                ((string Label, string Value, string? IconClass))(
+                    "Saved Properties",
+                    (ViewBag.SavedPropertiesCount?.ToString() ?? "0"),
+                    "fas fa-home"
+                ),
+                viewData: null)
         </div>
     </div>
 }
@@ -26,7 +33,7 @@
                 {
                     foreach (var property in Model)
                     {
-                        <div class="col-lg-4 col-md-6">
+                        <div class="col-lg-4 col_md-6">
                             <div class="card h-100 shadow-sm">
                                 <img class="card-img-top" src="@property.ImgSrc" alt="Property Image">
                                 <div class="card-body">
@@ -74,7 +81,3 @@
         </div>
     </div>
 </div>
-
-
-
-                   
