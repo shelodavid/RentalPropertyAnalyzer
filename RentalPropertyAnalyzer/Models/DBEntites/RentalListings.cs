@@ -18,6 +18,7 @@ namespace RentalPropertyAnalyzer.Models.DBEntites
             ImgSrc= string.Empty;
             Latitude= string.Empty;
             Longitude= string.Empty;
+            County = string.Empty;
         }
 
         [Key]
