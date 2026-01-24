@@ -78,6 +78,66 @@ namespace RentalPropertyAnalyzer.Models
         [Range(0.1, 20, ErrorMessage = "Mortgage Interest Rate must be between 0.1% and 20%")]
         [Display(Name = "Mortgage Interest Rate")]
         public decimal MortgageInterestRate { get; set; }
+        public decimal PropertyTaxRatePercent { get; set; }
+        public int PrepaidInterestDays { get; set; } = 15;
+        public decimal AnnualHomeownersInsurance { get; set; }
+        public int EscrowMonthsTaxes { get; set; } = 3;
+        public int EscrowMonthsInsurance { get; set; } = 2;
+        public decimal RecordingFees { get; set; } = 150;
+        public decimal TransferTaxes { get; set; }
+
+        public decimal EstimatedMonthlyPropertyTaxes
+        {
+            get
+            {
+                if (Price <= 0 || PropertyTaxRatePercent <= 0)
+                {
+                    return 0;
+                }
+
+                return (Price * (PropertyTaxRatePercent / 100m)) / 12m;
+            }
+        }
+
+        public decimal PrepaidInterestAmount
+        {
+            get
+            {
+                if (MortgageAmount <= 0 || MortgageInterestRate <= 0 || PrepaidInterestDays <= 0)
+                {
+                    return 0;
+                }
+
+                var dailyRate = (MortgageInterestRate / 100m) / 365m;
+                return MortgageAmount * dailyRate * PrepaidInterestDays;
+            }
+        }
+
+        public decimal EscrowSeedAmount
+        {
+            get
+            {
+                var monthlyTaxes = EstimatedMonthlyPropertyTaxes;
+                var monthlyInsurance = AnnualHomeownersInsurance / 12m;
+                return (monthlyTaxes * EscrowMonthsTaxes) + (monthlyInsurance * EscrowMonthsInsurance);
+            }
+        }
+
+        public decimal TotalPrepaids
+        {
+            get
+            {
+                return PrepaidInterestAmount + EscrowSeedAmount;
+            }
+        }
+
+        public decimal TotalGovernmentFees
+        {
+            get
+            {
+                return RecordingFees + TransferTaxes;
+            }
+        }
 
         public decimal TotalCost
         {
@@ -89,10 +149,9 @@ namespace RentalPropertyAnalyzer.Models
                     +CreditReportFee
                     +LoanOriginationFee
                      + TitleInsuranceCost
-                     + TitleSearchFee
-                     + EscrowFee
                      + FloodInspectionFee
-                     + MiscellaneousFees;
+                     + TotalPrepaids
+                     + TotalGovernmentFees;
             }
         }
 
@@ -102,5 +161,3 @@ namespace RentalPropertyAnalyzer.Models
         }
     }
 }
-
-
