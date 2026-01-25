@@ -27,6 +27,7 @@ builder.Services.AddDbContext<InvestmentProfileContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Add the PasswordHashService to the DI container
 builder.Services.AddScoped<PasswordHashService>();
+builder.Services.AddScoped<ForecastCalculator>();
 
 builder.Services.AddScoped<StateService>(serviceProvider =>
 {
