@@ -3,8 +3,6 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using RentalPropertyAnalyzer.DataAccessLayer;
 using RentalPropertyAnalyzer.Models;
-using RentalPropertyAnalyzer.Models.ViewModels;
-using RentalPropertyAnalyzer.Services;
 
 namespace RentalPropertyAnalyzer.Controllers
 {
@@ -14,22 +12,17 @@ namespace RentalPropertyAnalyzer.Controllers
         private readonly RentalListingContext _rentalListingContext;
         private readonly SavedPropertiesContext _savedPropertiesContext;
         private readonly InvestmentProfileContext _investmentProfileContext;
-        private readonly ForecastCalculator _forecastCalculator;
-
-
         // Update the constructor to inject YourDbContext
         public HomeController(
              ILogger<HomeController> logger,
              RentalListingContext rentalListingContext,
              SavedPropertiesContext savedPropertiesContext,
-             InvestmentProfileContext investmentProfileContext,
-             ForecastCalculator forecastCalculator)
+             InvestmentProfileContext investmentProfileContext)
         {
             _logger = logger;
             _rentalListingContext = rentalListingContext;
             _savedPropertiesContext = savedPropertiesContext;
             _investmentProfileContext = investmentProfileContext;
-            _forecastCalculator = forecastCalculator;
         }
 
         [HttpGet]
@@ -144,102 +137,22 @@ namespace RentalPropertyAnalyzer.Controllers
         [HttpGet]
         public IActionResult Forecast(int? zipID)
         {
-            var savedProperties = _savedPropertiesContext.SavedProperties.ToList();
-            if (!savedProperties.Any())
+            if (!zipID.HasValue)
             {
-                return View(new PropertyForecastViewModel
-                {
-                    SavedProperties = savedProperties
-                });
+                return RedirectToAction("Index");
             }
 
-            var selectedProperty = zipID.HasValue
-                ? savedProperties.FirstOrDefault(p => p.ZipID == zipID.Value)
-                : savedProperties.First();
-
-            if (selectedProperty == null)
-            {
-                return View(new PropertyForecastViewModel
-                {
-                    SavedProperties = savedProperties
-                });
-            }
-
-            var profile = _investmentProfileContext.InvestmentProfile.FirstOrDefault();
-            var defaultDownpaymentPercent = profile?.DownpaymentPercentage ?? 20m;
-            var defaultInterestRate = profile?.MortgageInterestRate ?? 6.5m;
-            var defaultTermYears = profile?.Term ?? 30;
-
-            var purchaseSheet = _savedPropertiesContext.PurchaseSheetResults
-                .FromSqlRaw("EXEC dbo.GetPurchaseSheet @ZipID", new SqlParameter("ZipID", selectedProperty.ZipID))
+            var forecastBase = _savedPropertiesContext.ForecastBaseRows
+                .FromSqlRaw("EXEC dbo.GetForecastBase @ZipID", new SqlParameter("ZipID", zipID))
                 .AsEnumerable()
                 .FirstOrDefault();
 
-            var price = selectedProperty.Price ?? 0m;
-            var downpaymentPercent = purchaseSheet?.DownpaymentPercentage > 0m
-                ? purchaseSheet.DownpaymentPercentage
-                : defaultDownpaymentPercent;
-            var downpaymentAmount = purchaseSheet?.Downpayment > 0m
-                ? purchaseSheet.Downpayment
-                : price * (downpaymentPercent / 100m);
-            var interestRate = purchaseSheet?.MortgageInterestRate > 0m
-                ? purchaseSheet.MortgageInterestRate
-                : defaultInterestRate;
-            var termYears = purchaseSheet?.Term > 0 ? purchaseSheet.Term : defaultTermYears;
-
-            if (purchaseSheet != null)
+            if (forecastBase == null)
             {
-                purchaseSheet.PropertyTaxRatePercent = profile?.PropertyTaxRate ?? 0m;
-                purchaseSheet.AnnualHomeownersInsurance = profile?.HomeownersInsurance ?? 0m;
+                return RedirectToAction("Index");
             }
 
-            var closingCosts = purchaseSheet != null
-                ? purchaseSheet.LoanClosingCosts + purchaseSheet.LoanOriginationFee + purchaseSheet.RealtorsCost
-                    + purchaseSheet.AppraisalFee + purchaseSheet.EscrowFee + purchaseSheet.TitleInsuranceCost + purchaseSheet.FloodInspectionFee
-                : profile?.ClosingCosts ?? 0m;
-            var prepaids = purchaseSheet?.TotalPrepaids ?? 0m;
-            var cashToClose = purchaseSheet?.TotalCost ?? (downpaymentAmount + closingCosts + prepaids);
-
-            var monthlyTaxes = price > 0 && profile?.PropertyTaxRate != null
-                ? (price * (profile.PropertyTaxRate / 100m)) / 12m
-                : 0m;
-
-            var annualInsurance = profile?.HomeownersInsurance ?? 0m;
-            var monthlyInsurance = annualInsurance / 12m;
-            var pmiRate = profile?.PMIRate ?? 0m;
-            var monthlyPmi = downpaymentPercent < 20m && pmiRate > 0m
-                ? (price * (pmiRate / 100m)) / 12m
-                : 0m;
-
-            var forecast = new PropertyForecastViewModel
-            {
-                SavedProperties = savedProperties,
-                ZipID = selectedProperty.ZipID,
-                Address = selectedProperty.StreetAddress,
-                ImgSrc = selectedProperty.ImgSrc,
-                Price = price,
-                EstimatedRent = selectedProperty.EstimatedRent ?? 0m,
-                DownpaymentPercentage = downpaymentPercent,
-                DownpaymentAmount = downpaymentAmount,
-                InterestRate = interestRate,
-                TermYears = termYears,
-                TotalClosingCosts = closingCosts,
-                TotalPrepaids = prepaids,
-                CashToClose = cashToClose,
-                PropertyTaxRate = profile?.PropertyTaxRate ?? 0m,
-                MonthlyPropertyTaxes = monthlyTaxes,
-                MonthlyInsurance = monthlyInsurance,
-                MonthlyPMI = monthlyPmi,
-                MonthlyMaintenance = profile?.MonthlyMaintenanceBudget ?? 0m,
-                MonthlyUtilities = profile?.MonthlyUtilitiesCost ?? 0m,
-                MonthlyHOA = profile?.HOAEstimate ?? 0m,
-                VacancyRate = profile?.VacancyRate ?? 0m,
-                PropertyManagementFeeRate = profile?.PropertyManagementFee ?? 0m,
-                IsEstimate = purchaseSheet == null
-            };
-
-            var computed = _forecastCalculator.Calculate(forecast);
-            return View(computed);
+            return View(forecastBase);
         }
 
 
