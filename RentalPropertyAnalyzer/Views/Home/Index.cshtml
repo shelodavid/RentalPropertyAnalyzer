@@ -8,13 +8,13 @@
 {
     <div class="row g-3">
         <div class="col-xl-3 col-md-6">
-            @await Html.PartialAsync("Partials/_StatCard", ("Saved Properties", (ViewBag.SavedPropertiesCount ?? 0).ToString(), "fas fa-home"), viewData: null)
+            @await Html.PartialAsync("Partials/_StatCard", UiPartialModels.StatCard("Saved Properties", (ViewBag.SavedPropertiesCount ?? 0).ToString(), "fas fa-home"), viewData: null)
         </div>
     </div>
 }
 
 <div class="container-fluid">
-    @await Html.PartialAsync("Partials/_PageHeader", ("Home", "Saved properties overview", (Microsoft.AspNetCore.Html.IHtmlContent?)null), viewData: null)
+    @await Html.PartialAsync("Partials/_PageHeader", UiPartialModels.PageHeader("Home", "Saved properties overview", (Microsoft.AspNetCore.Html.IHtmlContent?)null), viewData: null)
 
     <div class="card shadow-sm">
         <div class="card-header bg-white">

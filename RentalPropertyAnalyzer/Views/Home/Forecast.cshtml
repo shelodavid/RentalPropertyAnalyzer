@@ -6,7 +6,7 @@
 }
 
 <div class="container-fluid">
-    @await Html.PartialAsync("Partials/_PageHeader", ("ROI Forecast", "Base inputs for ROI forecasting", (Microsoft.AspNetCore.Html.IHtmlContent?)null), viewData: null)
+    @await Html.PartialAsync("Partials/_PageHeader", UiPartialModels.PageHeader("ROI Forecast", "Base inputs for ROI forecasting", (Microsoft.AspNetCore.Html.IHtmlContent?)null), viewData: null)
 
     <div class="card shadow-sm">
         <div class="card-header bg-white">
