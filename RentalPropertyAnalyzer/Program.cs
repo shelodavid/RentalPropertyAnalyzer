@@ -32,7 +32,8 @@ builder.Services.AddScoped<StateService>(serviceProvider =>
 {
     // Fetch the connection string from configuration
     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-    var connectionString = configuration.GetConnectionString("DefaultConnection"); // Ensure this matches your connection string key
+    var connectionString = configuration.GetConnectionString("DefaultConnection")
+        ?? throw new InvalidOperationException("DefaultConnection is not configured.");
     return new StateService(connectionString);
 });
 
