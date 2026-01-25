@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using RentalPropertyAnalyzer.DataAccessLayer;
+using RentalPropertyAnalyzer.Models;
 
 namespace RentalPropertyAnalyzer.Controllers
 {
@@ -10,17 +11,18 @@ namespace RentalPropertyAnalyzer.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly RentalListingContext _rentalListingContext;
         private readonly SavedPropertiesContext _savedPropertiesContext;
-
-
+        private readonly InvestmentProfileContext _investmentProfileContext;
         // Update the constructor to inject YourDbContext
         public HomeController(
              ILogger<HomeController> logger,
              RentalListingContext rentalListingContext,
-             SavedPropertiesContext savedPropertiesContext)
+             SavedPropertiesContext savedPropertiesContext,
+             InvestmentProfileContext investmentProfileContext)
         {
             _logger = logger;
             _rentalListingContext = rentalListingContext;
             _savedPropertiesContext = savedPropertiesContext;
+            _investmentProfileContext = investmentProfileContext;
         }
 
         [HttpGet]
@@ -43,7 +45,13 @@ namespace RentalPropertyAnalyzer.Controllers
                     command.CommandText = "EXEC dbo.GetSavedPropertiesCount";
                     connection.Open();
 
-                    int savedPropertiesCount = (int)command.ExecuteScalar();
+                    var scalarResult = command.ExecuteScalar();
+                    if (scalarResult == null || scalarResult == DBNull.Value)
+                    {
+                        throw new InvalidOperationException("Saved properties count query returned no value.");
+                    }
+
+                    int savedPropertiesCount = Convert.ToInt32(scalarResult);
 
                     // Pass the count to the view using ViewBag
                     ViewBag.SavedPropertiesCount = savedPropertiesCount;
@@ -54,7 +62,7 @@ namespace RentalPropertyAnalyzer.Controllers
                 }
                 catch (Exception ex)
                 {
-
+                    _logger.LogError(ex, "Error occurred while retrieving saved properties count.");
                 }
               
 
@@ -64,6 +72,7 @@ namespace RentalPropertyAnalyzer.Controllers
             
             catch (Exception ex) 
             {
+                _logger.LogError(ex, "Error occurred while retrieving saved properties.");
                 return RedirectToAction("ErrorView"); // Redirect to a view that shows an error message
             }
 
@@ -88,6 +97,7 @@ namespace RentalPropertyAnalyzer.Controllers
             }
         }
 
+        [HttpGet]
         public IActionResult GeneratePurchaseSheet(int zipID)
         {
             try
@@ -103,6 +113,11 @@ namespace RentalPropertyAnalyzer.Controllers
                     return RedirectToAction("Index"); // Redirect if no data is returned
                 }
 
+                // Initialize new closing cost defaults for display.
+                var profile = _investmentProfileContext.InvestmentProfile.FirstOrDefault();
+                purchaseSheet.PropertyTaxRatePercent = profile?.PropertyTaxRate ?? 0m;
+                purchaseSheet.AnnualHomeownersInsurance = profile?.HomeownersInsurance ?? 0m;
+
                 // Pass the data to the view
                 return View(purchaseSheet);
             }
@@ -111,6 +126,33 @@ namespace RentalPropertyAnalyzer.Controllers
                 _logger.LogError(ex, "Error occurred while generating purchase sheet for ZipID: {ZipID}", zipID);
                 return RedirectToAction("ErrorView");
             }
+        }
+
+        [HttpPost]
+        public IActionResult GeneratePurchaseSheet(PurchaseSheetViewModel model)
+        {
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Forecast(int? zipID)
+        {
+            if (!zipID.HasValue)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var forecastBase = _savedPropertiesContext.ForecastBaseRows
+                .FromSqlRaw("EXEC dbo.GetForecastBase @ZipID", new SqlParameter("ZipID", zipID))
+                .AsEnumerable()
+                .FirstOrDefault();
+
+            if (forecastBase == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return View(forecastBase);
         }
 
 
