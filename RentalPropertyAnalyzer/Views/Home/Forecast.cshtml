@@ -1,0 +1,54 @@
+@model RentalPropertyAnalyzer.Models.ForecastBaseRow
+
+@{
+    ViewData["Title"] = "ROI Forecast";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    @await Html.PartialAsync("Partials/_PageHeader", UiPartialModels.PageHeader("ROI Forecast", "Base inputs for ROI forecasting", (Microsoft.AspNetCore.Html.IHtmlContent?)null), viewData: null)
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-white">
+            <h3 class="h6 mb-0">Forecast Base Inputs</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-hover align-middle table-app">
+                <tbody>
+                    <tr>
+                        <th scope="row">ZipID</th>
+                        <td>@Model.ZipID</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Price</th>
+                        <td>@Model.Price.ToString("C")</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Estimated Rent</th>
+                        <td>@Model.EstimatedRent.ToString("C")</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Tax Assessed Value</th>
+                        <td>@Model.TaxAssessedValue.ToString("C")</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Downpayment Percentage</th>
+                        <td>@Model.DownpaymentPercentage.ToString("N2")%</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Mortgage Interest Rate</th>
+                        <td>@Model.MortgageInterestRate.ToString("N4")%</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Term</th>
+                        <td>@Model.Term years</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">HOA Estimate</th>
+                        <td>@Model.HOAEstimate.ToString("C")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
