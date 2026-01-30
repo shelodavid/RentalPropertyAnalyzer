@@ -183,15 +183,30 @@ namespace RentalPropertyAnalyzer.Controllers
                 return RedirectToAction("Index");
             }
 
-            var forecastBase = _savedPropertiesContext.ForecastBaseRows
+            var forecastBaseResult = _savedPropertiesContext.ForecastBaseResults
                 .FromSqlRaw("EXEC dbo.GetForecastBase @ZipID", new SqlParameter("ZipID", zipID))
                 .AsEnumerable()
                 .FirstOrDefault();
 
-            if (forecastBase == null)
+            if (forecastBaseResult == null)
             {
                 return RedirectToAction("Index");
             }
+
+            var listing = _rentalListingContext.RentalListings
+                .FirstOrDefault(listing => listing.Zpid == zipID.Value.ToString());
+
+            var forecastBase = new ForecastBaseRow
+            {
+                ZipID = forecastBaseResult.ZipID,
+                Price = forecastBaseResult.Price,
+                EstimatedRent = listing != null ? Convert.ToDecimal(listing.EstimatedRent) : 0m,
+                TaxAssessedValue = forecastBaseResult.TaxAssessedValue,
+                DownpaymentPercentage = forecastBaseResult.DownpaymentPercentage,
+                MortgageInterestRate = forecastBaseResult.MortgageInterestRate,
+                Term = forecastBaseResult.Term,
+                HOAEstimate = forecastBaseResult.HOAEstimate
+            };
 
             return View(forecastBase);
         }

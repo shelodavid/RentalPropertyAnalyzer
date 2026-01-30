@@ -31,8 +31,8 @@ namespace RentalPropertyAnalyzer.DataAccessLayer
         // DbSet for the PurchaseSheetDbResult (represents results from GetPurchaseSheet stored procedure)
         public DbSet<PurchaseSheetDbResult> PurchaseSheetResults { get; set; }
 
-        // DbSet for the ForecastBaseRow (represents results from GetForecastBase stored procedure)
-        public DbSet<ForecastBaseRow> ForecastBaseRows { get; set; }
+        // DbSet for the ForecastBaseDbResult (represents results from GetForecastBase stored procedure)
+        public DbSet<ForecastBaseDbResult> ForecastBaseResults { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,7 +45,7 @@ namespace RentalPropertyAnalyzer.DataAccessLayer
             // Configure PurchaseSheetDbResult as a keyless entity
             modelBuilder.Entity<PurchaseSheetDbResult>().HasNoKey();
 
-            modelBuilder.Entity<ForecastBaseRow>()
+            modelBuilder.Entity<ForecastBaseDbResult>()
                 .HasNoKey()
                 .ToView(null);
 
