@@ -134,7 +134,6 @@ namespace RentalPropertyAnalyzer.Controllers
                     EscrowMonthsInsurance = purchaseSheetResult.EscrowMonthsInsurance,
                     PropertyTaxRatePercent = purchaseSheetResult.PropertyTaxRatePercent,
                     EscrowMonthsTaxes = purchaseSheetResult.EscrowMonthsTaxes,
-                    HOAEstimate = purchaseSheetResult.HOAEstimate,
                     LoanOriginationFee = purchaseSheetResult.LoanOriginationFee,
                     LoanClosingCosts = purchaseSheetResult.LoanClosingCosts,
                     RealtorsCost = purchaseSheetResult.RealtorsCost,
