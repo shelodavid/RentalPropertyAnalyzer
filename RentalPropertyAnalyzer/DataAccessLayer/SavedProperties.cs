@@ -28,8 +28,8 @@ namespace RentalPropertyAnalyzer.DataAccessLayer
         // DbSet for the SavedProperties entity (represents the SavedPropertyListings table)
         public DbSet<SavedProperties> SavedProperties { get; set; }
 
-        // DbSet for the PurchaseSheetViewModel (represents results from GetPurchaseSheet stored procedure)
-        public DbSet<PurchaseSheetViewModel> PurchaseSheetResults { get; set; }
+        // DbSet for the PurchaseSheetDbResult (represents results from GetPurchaseSheet stored procedure)
+        public DbSet<PurchaseSheetDbResult> PurchaseSheetResults { get; set; }
 
         // DbSet for the ForecastBaseRow (represents results from GetForecastBase stored procedure)
         public DbSet<ForecastBaseRow> ForecastBaseRows { get; set; }
@@ -42,8 +42,8 @@ namespace RentalPropertyAnalyzer.DataAccessLayer
             modelBuilder.Entity<SavedProperties>()
                 .ToTable("SavedPropertyListings", "dbo"); // Maps to dbo.SavedPropertyListings
 
-            // Configure PurchaseSheetViewModel as a keyless entity
-            modelBuilder.Entity<PurchaseSheetViewModel>().HasNoKey();
+            // Configure PurchaseSheetDbResult as a keyless entity
+            modelBuilder.Entity<PurchaseSheetDbResult>().HasNoKey();
 
             modelBuilder.Entity<ForecastBaseRow>()
                 .HasNoKey()
