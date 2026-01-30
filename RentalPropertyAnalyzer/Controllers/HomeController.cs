@@ -103,20 +103,62 @@ namespace RentalPropertyAnalyzer.Controllers
             try
             {
                 // Execute stored procedure to fetch purchase sheet data
-                var purchaseSheet = _savedPropertiesContext.PurchaseSheetResults
+                var purchaseSheetResult = _savedPropertiesContext.PurchaseSheetResults
                     .FromSqlRaw("EXEC dbo.GetPurchaseSheet @ZipID", new SqlParameter("ZipID", zipID))
                     .AsEnumerable()
                     .FirstOrDefault();
 
-                if (purchaseSheet == null)
+                if (purchaseSheetResult == null)
                 {
                     return RedirectToAction("Index"); // Redirect if no data is returned
                 }
 
-                // Initialize new closing cost defaults for display.
+                var purchaseSheet = new PurchaseSheetViewModel
+                {
+                    InvestmentProfileID = purchaseSheetResult.InvestmentProfileID,
+                    ZipID = purchaseSheetResult.ZipID,
+                    StreetAddress = purchaseSheetResult.StreetAddress,
+                    PropertyType = purchaseSheetResult.PropertyType,
+                    Bathrooms = purchaseSheetResult.Bathrooms,
+                    Bedrooms = purchaseSheetResult.Bedrooms,
+                    ImgSrc = purchaseSheetResult.ImgSrc,
+                    Price = purchaseSheetResult.Price,
+                    TaxAssessedValue = purchaseSheetResult.TaxAssessedValue,
+                    DownpaymentPercentage = purchaseSheetResult.DownpaymentPercentage,
+                    MortgageInterestRate = purchaseSheetResult.MortgageInterestRate,
+                    Term = purchaseSheetResult.Term,
+                    Downpayment = purchaseSheetResult.Downpayment,
+                    MortgageAmount = purchaseSheetResult.MortgageAmount,
+                    EstimatedMortgageCost = purchaseSheetResult.EstimatedMortgageCost,
+                    AnnualHomeownersInsurance = purchaseSheetResult.AnnualHomeownersInsurance,
+                    EscrowMonthsInsurance = purchaseSheetResult.EscrowMonthsInsurance,
+                    PropertyTaxRatePercent = purchaseSheetResult.PropertyTaxRatePercent,
+                    EscrowMonthsTaxes = purchaseSheetResult.EscrowMonthsTaxes,
+                    HOAEstimate = purchaseSheetResult.HOAEstimate,
+                    LoanOriginationFee = purchaseSheetResult.LoanOriginationFee,
+                    LoanClosingCosts = purchaseSheetResult.LoanClosingCosts,
+                    RealtorsCost = purchaseSheetResult.RealtorsCost,
+                    AppraisalFee = purchaseSheetResult.AppraisalFee,
+                    CreditReportFee = purchaseSheetResult.CreditReportFee,
+                    TitleInsuranceCost = purchaseSheetResult.TitleInsuranceCost,
+                    TitleSearchFee = purchaseSheetResult.TitleSearchFee,
+                    EscrowFee = purchaseSheetResult.EscrowFee,
+                    FloodInspectionFee = purchaseSheetResult.FloodInspectionFee,
+                    MiscellaneousFees = purchaseSheetResult.MiscellaneousFees,
+                    RecordingFees = purchaseSheetResult.RecordingFees,
+                    TransferTaxes = purchaseSheetResult.TransferTaxes,
+                    PrepaidInterestDays = purchaseSheetResult.PrepaidInterestDays,
+                    EstimatedInsuranceCost = purchaseSheetResult.AnnualHomeownersInsurance / 12m
+                };
+
+                // Initialize closing cost defaults for display when profile data exists.
                 var profile = _investmentProfileContext.InvestmentProfile.FirstOrDefault();
-                purchaseSheet.PropertyTaxRatePercent = profile?.PropertyTaxRate ?? 0m;
-                purchaseSheet.AnnualHomeownersInsurance = profile?.HomeownersInsurance ?? 0m;
+                if (profile != null)
+                {
+                    purchaseSheet.PropertyTaxRatePercent = profile.PropertyTaxRate;
+                    purchaseSheet.AnnualHomeownersInsurance = profile.HomeownersInsurance;
+                    purchaseSheet.EstimatedInsuranceCost = profile.HomeownersInsurance / 12m;
+                }
 
                 // Pass the data to the view
                 return View(purchaseSheet);
